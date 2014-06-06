@@ -1,1 +1,3 @@
-restax
+# restax
+
+Resolving ambiguous taxa
