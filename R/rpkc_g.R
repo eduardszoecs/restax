@@ -75,8 +75,9 @@ rpkc_g <- function(x, value.var = NULL, group = c('S1', 'S2', 'S3', 'S4'), optio
     }
   }
   
+  method = paste0("RPKC-G-", option)
   # return
-  out <- list(comm = comm, ambp = cg$ambp, ambc = cg$ambc)
+  out <- list(comm = comm, ambp = cg$ambp, ambc = cg$ambc, method = method)
   class(out) <- 'restax'
   return(out) 
 }

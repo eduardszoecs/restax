@@ -8,6 +8,5 @@ License: CC0
 LazyLoad: yes
 LazyData: yes
 Depends:
-    taxize
-Suggests:
+    taxize,
     plyr
