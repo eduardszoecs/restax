@@ -2,7 +2,12 @@ Package: restax
 Title: Resolving ambiguous taxa
 Description: Resolving ambiguous taxa
 Version: 0.0.1
-Author: Eduard Szöcs
-Maintainer: Eduard Szäcs <eduardszoecs@gmail.com>
+Author: Eduard Szoecs
+Maintainer: Eduard Szoecs <eduardszoecs@gmail.com>
 License: CC0
-Encoding: UTF-8
+LazyLoad: yes
+LazyData: yes
+Depends:
+    taxize
+Suggests:
+    plyr
