@@ -50,21 +50,18 @@ mcwp_s <- function(x, value.var = NULL, level = 'Family'){
   hnames <- hnames[hnames %in% names(keep[keep == TRUE])]
   
   # check amb taxa
-  ambc <- rep(FALSE, nrow(dfw)) # children of amb
   ambp <- rep(FALSE, nrow(dfw)) # amb parent
   
   child <- !is.na(dfw[ , 'Species'])
   for(lev in rev(hnames)[-1]){
     parents <- unique(dfw[child, lev])
     ambp <- ambp | dfw[ , lev] %in% parents & !child
-    ambc <- ambc | dfw[ , lev] %in% parents & child
     child <- !is.na(dfw[ , lev])
   }
   
   # aggregate 
   agg <- aggregate(dfw[ , value.var], list(level = dfw[ , level]), sum)
 
-  
   # determine highest taxlevel
   dfwc <- dfw[!is.na(dfw[ , level]), ]
   foo <- function(y){
@@ -77,8 +74,12 @@ mcwp_s <- function(x, value.var = NULL, level = 'Family'){
   comm[ , value.var] <- keep[match(comm[ , 'taxon'], keep[ , 'taxon']), value.var]
   comm[ , value.var][is.na(comm[ , value.var])] <- 0
   
+  merged <- data.frame(taxon = dfw[ , "taxon"])
+  merged$with <- keep$taxon[match(dfw[ , level], keep[, level])]
+  
+  
   method = paste0('MCWP-S-', level)
-  out <- list(comm = comm, ambp = ambp, ambc = ambc, method = method)
+  out <- list(comm = comm, removed = is.na(dfw[ , level]), merged = merged, method = method)
   class(out) <- 'restax'
   return(out) 
 }

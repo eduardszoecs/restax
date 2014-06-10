@@ -44,23 +44,19 @@ rpkc_s <- function(x, value.var = NULL){
   dfw <- dfw[, keep]
   hnames <- hnames[hnames %in% names(keep[keep == TRUE])]
   
-  # check amb taxa
-  ambc <- rep(FALSE, nrow(dfw)) # children of amb
+  # check amb parents
   ambp <- rep(FALSE, nrow(dfw)) # amb parent
   
   child <- !is.na(dfw[ , 'Species'])
   for(lev in rev(hnames)[-1]){
     parents <- unique(dfw[child, lev])
     ambp <- ambp | dfw[ , lev] %in% parents & !child
-    ambc <- ambc | dfw[ , lev] %in% parents & child
     child <- !is.na(dfw[ , lev])
   }
   
   # set amb taxa to zero
   comm <- dfw
   comm[ambp , value.var] <- 0
-  
-  
   
   out <- list(comm = comm, removed = ambp , merged = NULL, method = 'RPKC-S')
   class(out) <- 'restax'

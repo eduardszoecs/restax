@@ -23,18 +23,19 @@
 #' rpkc_g(samp_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'L')
 #' rpkc_g(samp_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'C')
 #' }
-rpkc_g <- function(x, value.var = NULL, group = c('S1', 'S2', 'S3', 'S4'), option = c('C', 'K', 'L')){
+rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L')){
   if(option == 'K')
     stop("Option K currently not implemented!")
   if(class(x) != 'wide_class')
     stop("Need an object of class 'wide_class'!")
   if(is.null(value.var))
     stop("Must specify value.var!")
+  if(is.null(group))
+    stop("Must specify group!")
   dfw <- x[[1]]
   hnames <- x[[2]]
   if(!value.var %in% names(dfw))
     stop("value.var not found in data")
-  
   if(any(is.na(dfw[ , value.var])))
      stop("No NAs in value.var allowed!")
   
