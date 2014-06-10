@@ -16,8 +16,6 @@
 #' @examples
 #' \dontrun{
 #' data(samp)
-#' # clean taxa names
-#' names(samp) <- gsub(' sp.', '', names(samp))
 #' samp_w <- wide_class(samp)
 #' rpkc_s(samp_w, value.var = 'A')
 #' }
@@ -25,8 +23,15 @@
 rpkc_s <- function(x, value.var = NULL){
   if(class(x) != 'wide_class')
     stop("Need an object of class 'wide_class'!")
+  if(is.null(value.var))
+    stop("Must specify value.var!")
   dfw <- x[[1]]
   hnames <- x[[2]]
+  if(!value.var %in% names(dfw))
+    stop("value.var not found in data")
+  
+  if(any(is.na(dfw[ , value.var])))
+     stop("No NAs in value.var allowed!")
   
   dfw <- dfw[c('taxon', hnames, value.var)]
   # rm not diff levels

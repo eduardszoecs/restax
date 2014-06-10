@@ -13,7 +13,6 @@
 #' \dontrun{
 #' data(samp)
 #' # clean taxa names
-#' names(samp) <- gsub(' sp.', '', names(samp))
 #' wide_class(samp)
 #' }
 wide_class <- function(comm, db = 'itis'){
@@ -31,6 +30,6 @@ wide_class <- function(comm, db = 'itis'){
   wide[ , 'taxon'] <- df[ , 'taxon']
   tcomm <- merge(wide, df, by = 'taxon')
   out <- list(tcomm = tcomm, hnames = hnames)
-  class(wide_class) <- 'wide_class'
+  class(out) <- 'wide_class'
   return(out)
 }

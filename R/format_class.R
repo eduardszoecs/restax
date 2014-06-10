@@ -1,4 +1,5 @@
 #' Function format a classification object to a wide table
+#' 
 #' @note This function can only take one classification (no list of classifications), 
 #' see examples.
 #' @param class data.frame; a single data.frame holding the data.frame as returned by classification
@@ -8,11 +9,11 @@
 #' \dontrun{
 #' data(samp)
 #' # clean taxa names
-#' taxa <- gsub(' sp.', '', names(samp))
 #' require(taxize)
-#' require(plyr)
-#' class <- classification(taxa, db = 'itis')
+#' class <- classification(names(samp), db = 'itis')
 #' format_class(class[[1]])
+#' # many classications
+#' require(plyr)
 #' rbind.fill(lapply(class, format_class))
 #' }
 format_class <- function(class){

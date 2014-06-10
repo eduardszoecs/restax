@@ -25,7 +25,6 @@ Add classification information to community data
 \dontrun{
 data(samp)
 # clean taxa names
-names(samp) <- gsub(' sp.', '', names(samp))
 wide_class(samp)
 }
 }
