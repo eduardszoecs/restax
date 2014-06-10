@@ -7,8 +7,8 @@
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
 #'  \item comm - resolved community data matrix in wide format.
-#'  \item ambp - is the taxon an ambiguous parent?
-#'  \item ambc - is the taxon an ambiguous child?
+#'  \item removed - is the taxon removed
+#'  \item merged - is the taxon merged
 #' }
 #' @references Cuffney, T. F., Bilger, M. D. & Haigler, A. M. 
 #' Ambiguous taxa: effects on the characterization and interpretation of 
@@ -46,10 +46,10 @@ rpkc_g <- function(x, value.var = NULL, group = c('S1', 'S2', 'S3', 'S4'), optio
   
   # set amb taxa to zero
   comm <- dfw[ , c('taxon', hnames, value.var)]
-  comm[cg$ambp , value.var] <- 0
+  comm[cg$removed , value.var] <- 0
   
   # check if a amb taxon that is removed has no children
-  ambrm <- dfw[cg$ambp & dfw[, value.var] != 0, ]
+  ambrm <- dfw[cg$removed & dfw[, value.var] != 0, ]
   levl <- ambrm$taxon == ambrm[, hnames]
   ambrm$amblev <- names(ambrm[, hnames])[apply(levl, MARGIN = 1, FUN = function(x) which(x))]
   
@@ -77,7 +77,7 @@ rpkc_g <- function(x, value.var = NULL, group = c('S1', 'S2', 'S3', 'S4'), optio
   
   method = paste0("RPKC-G-", option)
   # return
-  out <- list(comm = comm, ambp = cg$ambp, ambc = cg$ambc, method = method)
+  out <- list(comm = comm, removed = cg$removed, merged = NULL, method = method)
   class(out) <- 'restax'
   return(out) 
 }

@@ -19,8 +19,8 @@ rpkc_g(x, value.var = NULL, group = c("S1", "S2", "S3", "S4"),
 a list of class 'restax', with the following elements
 \itemize{
  \item comm - resolved community data matrix in wide format.
- \item ambp - is the taxon an ambiguous parent?
- \item ambc - is the taxon an ambiguous child?
+ \item removed - is the taxon removed
+ \item merged - is the taxon merged
 }
 }
 \description{

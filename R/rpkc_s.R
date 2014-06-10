@@ -5,8 +5,8 @@
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
 #'  \item comm - resolved community data matrix in wide format.
-#'  \item ambp - is the taxon an ambiguous parent?
-#'  \item ambc - is the taxon an ambiguous child?
+#'  \item removed - is the taxon removed
+#'  \item merged - is the taxon merged
 #' }
 #' @references Cuffney, T. F., Bilger, M. D. & Haigler, A. M. 
 #' Ambiguous taxa: effects on the characterization and interpretation of 
@@ -60,7 +60,9 @@ rpkc_s <- function(x, value.var = NULL){
   comm <- dfw
   comm[ambp , value.var] <- 0
   
-  out <- list(comm = comm, ambp = ambp, ambc = ambc, method = 'RPKC-S')
+  
+  
+  out <- list(comm = comm, removed = ambp , merged = NULL, method = 'RPKC-S')
   class(out) <- 'restax'
   return(out) 
 }
