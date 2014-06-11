@@ -43,6 +43,8 @@ It currently can reproduce the appendix of Cuffney et al. (2007), but may break 
 
 Please use only ITIS as taxonomic backend, as others have not been tested yet.
 
+`dpac_g()` and `option='K'` are currently not available.
+
 Please [report any issues or bugs](https://github.com/EDiLD/restax/issues).
 
 

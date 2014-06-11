@@ -71,8 +71,11 @@ dpac_s <- function(x, value.var = NULL){
   for(i in run){
     tmp <- ddply(tmp, i, .fun = foo, value.var)
   }
+  # restore order
+  tmp <- tmp[match(dfw$taxon, tmp$taxon), ]
   
-  comm <- tmp[ , names(dfw)]
+  comm <- tmp[, names(dfw)]
+  
   method <- 'DPAC-S'
   action <- ifelse(tmp$ambp, 'removed', 'added')
   merged <- NULL
