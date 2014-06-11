@@ -4,7 +4,7 @@ Description: Resolving ambiguous taxa
 Version: 0.0.1
 Author: Eduard Szoecs
 Maintainer: Eduard Szoecs <eduardszoecs@gmail.com>
-License: CC0
+License: GPL (>= 3)
 LazyLoad: yes
 LazyData: yes
 Depends:

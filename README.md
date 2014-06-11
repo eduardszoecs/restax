@@ -4,20 +4,37 @@ restax
 `restax` is a R package with implements the methods of Cuffney et al. (2007) to
 resolve ambiguous taxa.
 
+### Methods
 Currently the following methods are available:
 
 + Remove parent, keep children (RPKC) : `rpkc_*()`
 + Merge children with parent (MCWP) : `mcwp_*()`
 + Remove parent or merge children (RPMC) : `rpmc_*()`
 
+### Variants
 All methods are available in two variants:
 
-+ `*_s` : Resolve separately for each sample
-+ `*_g` : Resolve for a group of samples
++ `*_s` : Resolve separately for each sample.
++ `*_g` : Resolve for a group of samples.
 
-### NOTE
+### Options
+Moreover some methods have additional options:
+
+##### rpkc_g()
++ `option = 'C'` : if the ambiguous parent has no child in a sample, 
+substitute the most frequently occurring child for the parent.
++ `option = 'L'` : if the ambiguous parent has no child in a sample, 
+substitute all of the children associated with the parent in the grouped data.
+
+##### mcwp_*()
+
++ `level = 'Family'` : remove all ambiguous parents above the specified level 
+(here family) before resolving ambiguous taxa.
+
+
+#### NOTE
 This package is currently under development and the code has not been tested extensively!
-
+Please [report any issues or bugs](https://github.com/EDiLD/restax/issues).
 
 ##### References
 Cuffney, T. F., Bilger, M. D. & Haigler, A. M. Ambiguous taxa: effects on the characterization and interpretation of invertebrate assemblages. Journal of the North American Benthological Society 26, 286–307 (2007).
