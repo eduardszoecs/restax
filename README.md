@@ -1,6 +1,9 @@
 restax
 =============
 
+
+[![Build Status](https://travis-ci.org/EDiLD/restax.png)](https://travis-ci.org/EDiLD/restax)
+
 `restax` is a R package with implements the methods of Cuffney et al. (2007) to
 resolve ambiguous taxa.
 
@@ -34,6 +37,7 @@ substitute all of the children associated with the parent in the grouped data.
 
 #### NOTE
 This package is currently under development and the code has not been tested extensively!
+
 Please [report any issues or bugs](https://github.com/EDiLD/restax/issues).
 
 ##### References
