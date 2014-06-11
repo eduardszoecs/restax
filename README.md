@@ -40,5 +40,6 @@ This package is currently under development and the code has not been tested ext
 
 Please [report any issues or bugs](https://github.com/EDiLD/restax/issues).
 
+
 ##### References
 Cuffney, T. F., Bilger, M. D. & Haigler, A. M. Ambiguous taxa: effects on the characterization and interpretation of invertebrate assemblages. Journal of the North American Benthological Society 26, 286–307 (2007).
