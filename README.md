@@ -13,6 +13,7 @@ Currently the following functions are available:
 + Remove parent, keep children (RPKC) : `rpkc_*()`
 + Merge children with parent (MCWP) : `mcwp_*()`
 + Remove parent or merge children (RPMC) : `rpmc_*()`
++ Distribute parent among children (DPAC) : `dpac_*()`
 
 ### Variants
 All functions are available in two variants:
@@ -23,7 +24,7 @@ All functions are available in two variants:
 ### Options
 Moreover, some functions have additional options:
 
-##### rpkc_g()
+##### rpkc_g() and dpac_g()
 + `option = 'C'` : if the ambiguous parent has no child in a sample, 
 substitute the most frequently occurring child for the parent.
 + `option = 'L'` : if the ambiguous parent has no child in a sample, 
