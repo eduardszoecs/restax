@@ -15,7 +15,7 @@ rpkc_s(x, value.var = NULL)
 a list of class 'restax', with the following elements
 \itemize{
  \item comm - resolved community data matrix in wide format.
- \item removed - is the taxon removed
+ \item action - what was done with the taxon
  \item merged - is the taxon merged
 }
 }

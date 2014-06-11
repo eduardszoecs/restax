@@ -9,8 +9,8 @@
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
 #'  \item comm - resolved community data matrix in wide format.
-#'  \item ambp - is the taxon an ambiguous parent?
-#'  \item ambc - is the taxon an ambiguous child?
+#'  \item action - what was done with the taxon
+#'  \item merged - is the taxon merged
 #' }
 #' @references Cuffney, T. F., Bilger, M. D. & Haigler, A. M. 
 #' Ambiguous taxa: effects on the characterization and interpretation of 
@@ -54,7 +54,8 @@ mcwp_g <- function(x, value.var = NULL, group = NULL, level = 'Family'){
   comm[comm$taxon %in% agg$taxon , value.var] <- agg$x
   
   method = paste0('MCWP-G-', level)
-  out <- list(comm = comm, removed = cg$removed, merged = cg$merged, method = method)
+  out <- list(comm = comm, action = cg$action, merged = cg$merged, 
+              method = method)
   class(out) <- 'restax'
   return(out) 
 }

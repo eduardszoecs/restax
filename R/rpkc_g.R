@@ -8,7 +8,7 @@
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
 #'  \item comm - resolved community data matrix in wide format.
-#'  \item removed - is the taxon removed
+#'  \item action - what was done with the taxon
 #'  \item merged - is the taxon merged
 #' }
 #' @references Cuffney, T. F., Bilger, M. D. & Haigler, A. M. 
@@ -48,10 +48,10 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
   
   # set amb taxa to zero
   comm <- dfw[ , c('taxon', hnames, value.var)]
-  comm[cg$removed , value.var] <- 0
+  comm[cg$action == 'removed' , value.var] <- 0
   
   # check if a amb taxon that is removed has no children
-  ambrm <- dfw[cg$removed & dfw[, value.var] != 0, ]
+  ambrm <- dfw[cg$action == 'removed' & dfw[, value.var] != 0, ]
   levl <- ambrm$taxon == ambrm[, hnames]
   ambrm$amblev <- names(ambrm[, hnames])[apply(levl, MARGIN = 1, 
                                                FUN = function(x) which(x))]
@@ -80,7 +80,7 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
   
   method = paste0("RPKC-G-", option)
   # return
-  out <- list(comm = comm, removed = cg$removed, merged = NULL, method = method)
+  out <- list(comm = comm, action = cg$action, merged = NULL, method = method)
   class(out) <- 'restax'
   return(out) 
 }

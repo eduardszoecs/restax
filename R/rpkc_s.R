@@ -6,7 +6,7 @@
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
 #'  \item comm - resolved community data matrix in wide format.
-#'  \item removed - is the taxon removed
+#'  \item action - what was done with the taxon
 #'  \item merged - is the taxon merged
 #' }
 #' @references Cuffney, T. F., Bilger, M. D. & Haigler, A. M. 
@@ -59,7 +59,7 @@ rpkc_s <- function(x, value.var = NULL){
   comm <- dfw
   comm[ambp , value.var] <- 0
   
-  out <- list(comm = comm, removed = ambp , merged = NULL, method = 'RPKC-S')
+  out <- list(comm = comm, action = ifelse(ambp, "removed", "keep") , merged = NULL, method = 'RPKC-S')
   class(out) <- 'restax'
   return(out) 
 }

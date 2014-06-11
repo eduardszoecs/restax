@@ -20,8 +20,8 @@ Should be returned by \code{\link[restax]{wide_class}}, see hnames therein.}
 a list of class 'restax', with the following elements
 \itemize{
  \item comm - resolved community data matrix in wide format.
- \item ambp - is the taxon an ambiguous parent?
- \item ambc - is the taxon an ambiguous child?
+ \item action - what was done with the taxon
+ \item merged - is the taxon merged
 }
 }
 \description{
