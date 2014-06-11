@@ -1,7 +1,8 @@
 #' Merge Children with Parents - One sample variant.
 #' 
-#' @param x list; An object of class wide_class as returned by \code{\link[restax]{wide_class}} 
-#' @param value.var character; Name of the column holding the abundances
+#' @param x list; An object of class wide_class as returned by 
+#' \code{\link[restax]{wide_class}}. 
+#' @param value.var character; Name of the column holding the abundances.
 #' @param level character; Taxonomic level above taxa will be eliminated. 
 #'  Should be returned by \code{\link[restax]{wide_class}}, see hnames therein.
 #' @return a list of class 'restax', with the following elements
@@ -79,7 +80,8 @@ mcwp_s <- function(x, value.var = NULL, level = 'Family'){
   
   
   method = paste0('MCWP-S-', level)
-  out <- list(comm = comm, removed = is.na(dfw[ , level]), merged = merged, method = method)
+  out <- list(comm = comm, removed = is.na(dfw[ , level]), merged = merged, 
+              method = method)
   class(out) <- 'restax'
   return(out) 
 }

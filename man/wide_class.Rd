@@ -6,7 +6,8 @@
 wide_class(comm, db = "itis")
 }
 \arguments{
-\item{comm}{data.frame; community data in wide format (samples in rows, species in cols).}
+\item{comm}{data.frame; community data in wide format
+(samples in rows, species in columns).}
 
 \item{db}{character; database to retrieve classification data.
 See  \code{\link[taxize]{classification}} for more details.}

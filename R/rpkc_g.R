@@ -1,8 +1,9 @@
 #' Remove Parents Keep Children - Group variant
 #' 
-#' @param x list; An object of class wide_class as returned by \code{\link[restax]{wide_class}} 
-#' @param value.var character; Name of the column holding the abundances to resolve
-#' @param group character; Names of columns (=samples) for grouping
+#' @param x list; An object of class wide_class as returned by 
+#' \code{\link[restax]{wide_class}}. 
+#' @param value.var character; Name of the column holding the abundances to resolve.
+#' @param group character; Names of columns (=samples) for grouping.
 #' @param option character; Currently only C and L options are supported.
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
@@ -52,7 +53,8 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
   # check if a amb taxon that is removed has no children
   ambrm <- dfw[cg$removed & dfw[, value.var] != 0, ]
   levl <- ambrm$taxon == ambrm[, hnames]
-  ambrm$amblev <- names(ambrm[, hnames])[apply(levl, MARGIN = 1, FUN = function(x) which(x))]
+  ambrm$amblev <- names(ambrm[, hnames])[apply(levl, MARGIN = 1, 
+                                               FUN = function(x) which(x))]
   
   for(i in 1:nrow(ambrm)){
     assg <- all(dfw[dfw[ , ambrm$amblev[i]] == ambrm$taxon[i] & 

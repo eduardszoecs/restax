@@ -1,5 +1,6 @@
 #' Add classification information to community data
-#' @param comm data.frame; community data in wide format (samples in rows, species in cols).
+#' @param comm data.frame; community data in wide format 
+#' (samples in rows, species in columns).
 #' @param db character; database to retrieve classification data. 
 #' See  \code{\link[taxize]{classification}} for more details.
 #' @return A list of class wide_class, with the following elements:

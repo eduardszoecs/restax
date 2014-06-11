@@ -6,9 +6,10 @@
 rpkc_s(x, value.var = NULL)
 }
 \arguments{
-\item{x}{list; An object of class wide_class as returned by \code{\link[restax]{wide_class}}}
+\item{x}{list; An object of class wide_class as returned by
+\code{\link[restax]{wide_class}}.}
 
-\item{value.var}{character; Name of the column holding the abundances}
+\item{value.var}{character; Name of the column holding the abundances.}
 }
 \value{
 a list of class 'restax', with the following elements

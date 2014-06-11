@@ -6,9 +6,10 @@
 mcwp_s(x, value.var = NULL, level = "Family")
 }
 \arguments{
-\item{x}{list; An object of class wide_class as returned by \code{\link[restax]{wide_class}}}
+\item{x}{list; An object of class wide_class as returned by
+\code{\link[restax]{wide_class}}.}
 
-\item{value.var}{character; Name of the column holding the abundances}
+\item{value.var}{character; Name of the column holding the abundances.}
 
 \item{level}{character; Taxonomic level above taxa will be eliminated.
 Should be returned by \code{\link[restax]{wide_class}}, see hnames therein.}

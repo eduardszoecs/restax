@@ -1,7 +1,8 @@
 #' Remove Parents Keep Children - One sample variant.
 #'
-#' @param x list; An object of class wide_class as returned by \code{\link[restax]{wide_class}} 
-#' @param value.var character; Name of the column holding the abundances
+#' @param x list; An object of class wide_class as returned by 
+#' \code{\link[restax]{wide_class}}. 
+#' @param value.var character; Name of the column holding the abundances.
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
 #'  \item comm - resolved community data matrix in wide format.

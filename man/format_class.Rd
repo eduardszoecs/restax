@@ -6,7 +6,8 @@
 format_class(class)
 }
 \arguments{
-\item{class}{data.frame; a single data.frame holding the data.frame as returned by classification}
+\item{class}{data.frame; a single data.frame holding the data.frame as
+returned by \code{\link[taxize]{classification}}.}
 }
 \value{
 a wide data.frame.

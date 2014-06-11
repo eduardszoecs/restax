@@ -6,11 +6,12 @@
 rpkc_g(x, value.var = NULL, group = NULL, option = c("C", "K", "L"))
 }
 \arguments{
-\item{x}{list; An object of class wide_class as returned by \code{\link[restax]{wide_class}}}
+\item{x}{list; An object of class wide_class as returned by
+\code{\link[restax]{wide_class}}.}
 
-\item{value.var}{character; Name of the column holding the abundances to resolve}
+\item{value.var}{character; Name of the column holding the abundances to resolve.}
 
-\item{group}{character; Names of columns (=samples) for grouping}
+\item{group}{character; Names of columns (=samples) for grouping.}
 
 \item{option}{character; Currently only C and L options are supported.}
 }

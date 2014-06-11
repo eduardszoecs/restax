@@ -1,6 +1,7 @@
 #' Merge Children with Parents - Group variant
 #' 
-#' @param x list; An object of class wide_class as returned by \code{\link[restax]{wide_class}} 
+#' @param x list; An object of class wide_class as returned by 
+#' \code{\link[restax]{wide_class}}. 
 #' @param value.var character; Name of the column holding the abundances to resolve
 #' @param group character; Names of columns (=samples) for grouping
 #' @param level character; Taxonomic level above taxa will be eliminated. 
