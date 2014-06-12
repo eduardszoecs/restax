@@ -10,3 +10,6 @@ LazyData: yes
 Depends:
     taxize,
     plyr
+Suggests:
+    testthat,
+    roxygen2

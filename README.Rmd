@@ -1,4 +1,4 @@
-```{r set_global_opts, cache=FALSE}
+```{r set_global_opts, cache=FALSE, echo=FALSE}
 opts_chunk$set(cache=TRUE, autodep=TRUE)
 ```
 

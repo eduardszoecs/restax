@@ -3,6 +3,7 @@
 #' (samples in rows, species in columns).
 #' @param db character; database to retrieve classification data. 
 #' See  \code{\link[taxize]{classification}} for more details.
+#' @param ...  Other arguments passed to \code{\link[taxize]{classification}}, 
 #' @return A list of class wide_class, with the following elements:
 #' \itemize{
 #'  \item tcomm - the transposed datamatirx with added taxonomic information
@@ -16,12 +17,12 @@
 #' # clean taxa names
 #' wide_class(samp)
 #' }
-wide_class <- function(comm, db = 'itis'){
+wide_class <- function(comm, db = 'itis', ...){
   # transpose comm
   df <- data.frame(t(comm), stringsAsFactors = FALSE)
   df[ , 'taxon'] <- rownames(df)
   # get classification
-  hier <- classification(df[ , 'taxon'], db)
+  hier <- classification(df[ , 'taxon'], db, ...)
   # reformat classification
   wide <- rbind.fill(lapply(hier, format_class))
   # convert to char

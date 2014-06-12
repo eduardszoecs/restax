@@ -3,7 +3,7 @@
 \alias{wide_class}
 \title{Add classification information to community data}
 \usage{
-wide_class(comm, db = "itis")
+wide_class(comm, db = "itis", ...)
 }
 \arguments{
 \item{comm}{data.frame; community data in wide format
@@ -11,6 +11,8 @@ wide_class(comm, db = "itis")
 
 \item{db}{character; database to retrieve classification data.
 See  \code{\link[taxize]{classification}} for more details.}
+
+\item{...}{Other arguments passed to \code{\link[taxize]{classification}},}
 }
 \value{
 A list of class wide_class, with the following elements:

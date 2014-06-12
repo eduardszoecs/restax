@@ -1,7 +1,4 @@
 
-```r
-opts_chunk$set(cache=TRUE, autodep=TRUE)
-```
 
 
 restax
