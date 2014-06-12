@@ -1,3 +1,9 @@
+
+```r
+opts_chunk$set(cache=TRUE, autodep=TRUE)
+```
+
+
 restax
 =============
 
@@ -35,7 +41,8 @@ substitute all of the children associated with the parent in the grouped data.
 + `level = 'Family'` : remove all ambiguous parents above the specified level 
 (here family) before resolving ambiguous taxa.
 
-### Installation
+Installation
+==============
 `restax` is currently only available on github. To install `restax` use:
 
 ```r
@@ -46,8 +53,10 @@ require(restax)
 ```
 
 
-### Example
-Let's say we have our data in the wide format (as commonly used in community ecology):
+Example
+=================
+Let's say we have our data in the wide format (as commonly used in community ecology).
+Here we have data of 5 samples (S1-S4, A) with 12 taxa:
 
 ```r
 require(restax)
@@ -139,8 +148,8 @@ df$tcomm
 ## 12 110
 ```
 This
-+ transposes our data
-+ add taxomic information
++ transposed our data
++ added taxomic information
 + returns an object of class `wide_class`.
 
 To resolve ambiguous taxa using the `RPKC-S` method (remove parents, keep childs - per sample) for sample A we use:
@@ -182,7 +191,8 @@ df_res$comm
 We see that only the 5 Baetidae species and Argia sp. are kept, all others (as they are parents) are set to zero.
 
 
-### NOTE
+NOTES
+=============
 This package is currently under development and the code has not been tested extensively!
 Moreover, there is some work needed to make the package more user friendly!
 
