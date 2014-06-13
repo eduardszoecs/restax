@@ -1,7 +1,7 @@
 #' Remove Parent or Merge Child (RPMC) - Group variant.
 #' 
 #' @param x list; An object of class wide_class as returned by 
-#' \code{\link[restax]{wide_class}}. 
+#' \code{\link[restax]{get_hier}}. 
 #' @param value.var character; Name of the column holding the abundances.
 #' @param group character; Names of columns (=samples) for grouping
 #' @return a list of class 'restax', with the following elements

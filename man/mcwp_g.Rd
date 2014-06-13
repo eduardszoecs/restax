@@ -7,7 +7,7 @@ mcwp_g(x, value.var = NULL, group = NULL, level = "Family")
 }
 \arguments{
 \item{x}{list; An object of class wide_class as returned by
-\code{\link[restax]{wide_class}}.}
+\code{\link[restax]{get_hier}}.}
 
 \item{value.var}{character; Name of the column holding the abundances to resolve}
 
@@ -30,11 +30,14 @@ Merge Children with Parents - Group variant
 \examples{
 \dontrun{
 data(samp)
-samp_w <- wide_class(samp)
-samp_w$hnames
-mcwp_g(samp_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), level = 'Family')
-mcwp_g(samp_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), level = 'Order')
-mcwp_g(samp_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), level = 'Class')
+# transpose data
+df <- data.frame(t(samp), stringsAsFactors = FALSE)
+df[ , 'taxon'] <- rownames(df)
+df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+names(df_w$hier)
+mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Family')
+mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Order')
+mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Class')
 }
 }
 \references{

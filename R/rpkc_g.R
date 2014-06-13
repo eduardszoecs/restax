@@ -1,7 +1,7 @@
 #' Remove Parents Keep Children - Group variant
 #' 
 #' @param x list; An object of class wide_class as returned by 
-#' \code{\link[restax]{wide_class}}. 
+#' \code{\link[restax]{get_hier}}. 
 #' @param value.var character; Name of the column holding the abundances to resolve.
 #' @param group character; Names of columns (=samples) for grouping.
 #' @param option character; Currently only C and L options are supported.
