@@ -12,7 +12,7 @@ mcwp_s(x, value.var = NULL, level = "Family")
 \item{value.var}{character; Name of the column holding the abundances.}
 
 \item{level}{character; Taxonomic level above taxa will be eliminated.
-Should be returned by \code{\link[restax]{wide_class}}, see hnames therein.}
+Should be returned by \code{\link[restax]{get_hier}}, see hnames therein.}
 }
 \value{
 a list of class 'restax', with the following elements

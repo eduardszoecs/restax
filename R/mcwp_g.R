@@ -11,6 +11,7 @@
 #'  \item comm - resolved community data matrix in wide format.
 #'  \item action - what was done with the taxon
 #'  \item merged - is the taxon merged
+#'  \item method - method to resolve taxa
 #' }
 #' @references Cuffney, T. F., Bilger, M. D. & Haigler, A. M. 
 #' Ambiguous taxa: effects on the characterization and interpretation of 
@@ -46,23 +47,22 @@ mcwp_g <- function(x, value.var = NULL, group = NULL, level = 'Family'){
   gg <- rowSums(comm[, group], na.rm = TRUE) 
   xg <- x
   xg$comm[ , 'gg'] <- gg
-  cg <- mcwp_s(xg, value.var = 'gg')
+  cg <- mcwp_s(xg, value.var = 'gg', level = level)
   
   comm_agg <- merge(comm, cg$merged, by = taxa.var)
-  # restore order
-  comm_agg <- comm_agg[match(comm[ , taxa.var], comm_agg[ , taxa.var]), ]
-  
   agg <- aggregate(comm_agg[, value.var], list(taxon = comm_agg[ , "with"]), sum)
-  comm[ , value.var] <- 0
-# !!!!!!  ### This line needs to be fixed!!!!
-# use merge etc...
-  comm[comm[ , taxa.var] %in% agg$taxon , value.var] <- agg$x
+  commout <- merge(comm, agg, all = TRUE)
+  commout[ , value.var] <- commout[ , "x"]
+  commout[is.na(commout[ , value.var]) , value.var] <- 0
   
   # keep only value.var
-  comm <- comm[ ,c(taxa.var, value.var)]
+  commout <- commout[ ,c(taxa.var, value.var)]
+  
+  # restore order
+  commout <- commout[match(comm[ , taxa.var], commout[ , taxa.var]), ]
   
   method = paste0('MCWP-G-', level)
-  out <- list(comm = comm, action = cg$action, merged = cg$merged, 
+  out <- list(comm = commout, action = cg$action, merged = cg$merged, 
               method = method)
   class(out) <- 'restax'
   return(out) 

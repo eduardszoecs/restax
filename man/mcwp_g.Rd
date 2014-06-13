@@ -14,7 +14,7 @@ mcwp_g(x, value.var = NULL, group = NULL, level = "Family")
 \item{group}{character; Names of columns (=samples) for grouping}
 
 \item{level}{character; Taxonomic level above taxa will be eliminated.
-Should be returned by \code{\link[restax]{wide_class}}, see hnames therein.}
+Should be returned by \code{\link[restax]{get_hier}}, see hnames therein.}
 }
 \value{
 a list of class 'restax', with the following elements
@@ -22,6 +22,7 @@ a list of class 'restax', with the following elements
  \item comm - resolved community data matrix in wide format.
  \item action - what was done with the taxon
  \item merged - is the taxon merged
+ \item method - method to resolve taxa
 }
 }
 \description{
