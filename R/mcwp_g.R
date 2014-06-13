@@ -5,7 +5,7 @@
 #' @param value.var character; Name of the column holding the abundances to resolve
 #' @param group character; Names of columns (=samples) for grouping
 #' @param level character; Taxonomic level above taxa will be eliminated. 
-#'  Should be returned by \code{\link[restax]{wide_class}}, see hnames therein.
+#'  Should be returned by \code{\link[restax]{get_hier}}, see hnames therein.
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
 #'  \item comm - resolved community data matrix in wide format.
