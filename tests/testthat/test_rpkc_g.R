@@ -27,7 +27,7 @@ test_that("RPKC-G returns correct object", {
 })
 
 test_that("correct action", {
-  expect_that(all(comm_c$A[out$action == 'removed'] == 0), is_true())
+  expect_that(all(comm_c$A[out_c$action == 'removed'] == 0), is_true())
 })
 
 

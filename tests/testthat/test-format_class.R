@@ -18,6 +18,6 @@ test_that("format_class returns the correct value", {
 })
 
 test_that("format_class returns the correct class", {
-  expect_that(out , is.a("data.frame"))
+  expect_that(out , is_a("data.frame"))
   expect_that(nrow(out), equals(1))
 })
