@@ -1,4 +1,4 @@
-#' Function format a classification object to a wide table
+#' Transpose a classification object
 #' 
 #' @note This function can only take one classification (no list of classifications), 
 #' see examples.
@@ -20,6 +20,6 @@
 format_class <- function(class){
   levs <- class[ , 'name']
   names(levs) <- class[ , 'rank']
-  out <- data.frame(t(levs))
+  out <- data.frame(t(levs), stringsAsFactors = FALSE)
   return(out)
 }
