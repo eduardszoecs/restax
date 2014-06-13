@@ -5,9 +5,10 @@
 #' @param value.var character; Name of the column holding the abundances.
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
-#'  \item comm - resolved community data matrix in wide format.
+#'  \item comm - resolved community data (one sample)
 #'  \item action - what was done with the taxon
 #'  \item merged - is the taxon merged
+#'  \item method - method to resolve taxa
 #' }
 #' @references Cuffney, T. F., Bilger, M. D. & Haigler, A. M. 
 #' Ambiguous taxa: effects on the characterization and interpretation of 
@@ -17,8 +18,11 @@
 #' @examples
 #' \dontrun{
 #' data(samp)
-#' samp_w <- wide_class(samp)
-#' rpkc_s(samp_w, value.var = 'A')
+#' # transpose data
+#' df <- data.frame(t(samp), stringsAsFactors = FALSE)
+#' df[ , 'taxon'] <- rownames(df)
+#' df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+#' rpkc_s(df_w, value.var = 'A')
 #' }
 
 rpkc_s <- function(x, value.var = NULL){
@@ -26,38 +30,39 @@ rpkc_s <- function(x, value.var = NULL){
     stop("Need an object of class 'wide_class'!")
   if(is.null(value.var))
     stop("Must specify value.var!")
-  dfw <- x[[1]]
-  hnames <- x[[2]]
-  if(!value.var %in% names(dfw))
+  comm <- x[['comm']]
+  hier <- x[['hier']]
+  taxa.var <- x[['taxa.var']]
+  if(!value.var %in% names(comm))
     stop("value.var not found in data")
-  
-  if(any(is.na(dfw[ , value.var])))
+  if(any(is.na(comm[ , value.var])))
      stop("No NAs in value.var allowed!")
   
-  dfw <- dfw[c('taxon', hnames, value.var)]
-  # rm not diff levels
-  keep <- apply(dfw, 2, function(x) any(is.na(x)))
-  keep[value.var] <- TRUE
+  # rm not indiff levels
+  keep <- apply(hier, 2, function(x) any(is.na(x)))
   # keep last level
   keep[rle(keep)$lengths[1]] <- TRUE
   # keep taxon
-  keep['taxon'] <- TRUE
-  dfw <- dfw[, keep]
-  hnames <- hnames[hnames %in% names(keep[keep == TRUE])]
-  
+  keep[taxa.var] <- TRUE
+  hier <- hier[, keep]
+
   # check amb parents
-  ambp <- rep(FALSE, nrow(dfw)) # amb parent
-  
-  child <- !is.na(dfw[ , 'Species'])
-  for(lev in rev(hnames)[-1]){
-    parents <- unique(dfw[child, lev])
-    ambp <- ambp | dfw[ , lev] %in% parents & !child
-    child <- !is.na(dfw[ , lev])
+  run <- rev(names(hier))
+  run <- run[!run %in% c(taxa.var, "Species")]
+  ambp <- rep(FALSE, nrow(comm)) # amb parent
+  child <- !is.na(hier[ , 'Species'])
+  for(lev in run){
+    parents <- unique(hier[child, lev])
+    ambp <- ambp | hier[ , lev] %in% parents & !child
+    child <- !is.na(hier[ , lev])
   }
   
-  # set amb taxa to zero
-  comm <- dfw
+  # Remove parents
   comm[ambp , value.var] <- 0
+  
+  # keep only value.var
+  comm <- comm[ ,c(taxa.var, value.var)]
+  
   
   out <- list(comm = comm, action = ifelse(ambp, "removed", "keep") , merged = NULL, method = 'RPKC-S')
   class(out) <- 'restax'

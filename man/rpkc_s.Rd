@@ -14,9 +14,10 @@ rpkc_s(x, value.var = NULL)
 \value{
 a list of class 'restax', with the following elements
 \itemize{
- \item comm - resolved community data matrix in wide format.
+ \item comm - resolved community data (one sample)
  \item action - what was done with the taxon
  \item merged - is the taxon merged
+ \item method - method to resolve taxa
 }
 }
 \description{
@@ -25,8 +26,11 @@ Remove Parents Keep Children - One sample variant.
 \examples{
 \dontrun{
 data(samp)
-samp_w <- wide_class(samp)
-rpkc_s(samp_w, value.var = 'A')
+# transpose data
+df <- data.frame(t(samp), stringsAsFactors = FALSE)
+df[ , 'taxon'] <- rownames(df)
+df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+rpkc_s(df_w, value.var = 'A')
 }
 }
 \references{
