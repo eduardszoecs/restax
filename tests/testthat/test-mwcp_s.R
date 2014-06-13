@@ -27,7 +27,7 @@ test_that("MCWP-S returns the correct value", {
   expect_that(comm_c[comm_c$taxon == 'Acentrella', value.var], equals(0))
   expect_that(comm_c[comm_c$taxon == 'Baetidae', value.var], equals(0))
   expect_that(comm_c[comm_c$taxon == 'Ephemeroptera', value.var], equals(0))
-  expect_that(comm_c[comm_c$taxon == 'Insecta', value.var], equals(0))
+  expect_that(comm_c[comm_c$taxon == 'Insecta', value.var], equals(760))
 })
 
 test_that("MCWP-S returns correct object", {
