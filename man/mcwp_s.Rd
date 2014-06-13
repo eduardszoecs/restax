@@ -17,9 +17,10 @@ Should be returned by \code{\link[restax]{wide_class}}, see hnames therein.}
 \value{
 a list of class 'restax', with the following elements
 \itemize{
- \item comm - resolved community data matrix in wide format.
+ \item comm - resolved community data (one sample)
  \item action - what was done with the taxon
  \item merged - is the taxon merged
+ \item method - method to resolve taxa
 }
 }
 \description{
@@ -28,11 +29,14 @@ Merge Children with Parents - One sample variant.
 \examples{
 \dontrun{
 data(samp)
-samp_w <- wide_class(samp)
-samp_w$hnames
-mcwp_s(samp_w, value.var = 'A', level = 'Family')
-mcwp_s(samp_w, value.var = 'A', level = 'Order')
-mcwp_s(samp_w, value.var = 'A', level = 'Class')
+# transpose data
+df <- data.frame(t(samp), stringsAsFactors = FALSE)
+df[ , 'taxon'] <- rownames(df)
+df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+names(df_w$hier)
+mcwp_s(df_w, value.var = 'A', level = 'Family')
+mcwp_s(df_w, value.var = 'A', level = 'Order')
+mcwp_s(df_w, value.var = 'A', level = 'Class')
 }
 }
 \references{
