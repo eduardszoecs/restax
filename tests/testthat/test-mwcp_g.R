@@ -5,7 +5,7 @@ data(samp)
 df <- data.frame(t(samp), stringsAsFactors = FALSE)
 df[ , 'taxon'] <- rownames(df)
 taxa.var = 'taxon'
-value.var = 'A'
+value.var = 'S3'
 df_w <- get_hier(df, taxa.var = taxa.var, db = 'itis')
 
 out_f <- mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Family')
@@ -27,7 +27,7 @@ test_that("MCWP-G returns the correct value", {
   expect_that(comm_o[comm_o$taxon == 'Baetidae', value.var], equals(0))
   expect_that(comm_o[comm_o$taxon == 'Ephemeroptera', value.var], equals(166))
   expect_that(comm_o[comm_o$taxon == 'Argia', value.var], equals(0))
-  expect_that(comm_o[comm_o$taxon == 'Zygoptera', value.var], equals(70))
+  expect_that(comm_o[comm_o$taxon == 'Zygoptera', value.var], equals(10))
   #
   expect_that(comm_c[comm_c$taxon == 'Acentrella', value.var], equals(0))
   expect_that(comm_c[comm_c$taxon == 'Baetidae', value.var], equals(0))
