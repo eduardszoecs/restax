@@ -33,39 +33,38 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
     stop("Must specify value.var!")
   if(is.null(group))
     stop("Must specify group!")
-  dfw <- x[[1]]
-  hnames <- x[[2]]
-  if(!value.var %in% names(dfw))
+  comm <- x[['comm']]
+  hier <- x[['hier']]
+  taxa.var <- x[['taxa.var']]
+  if(!value.var %in% names(comm))
     stop("value.var not found in data")
-  if(any(is.na(dfw[ , value.var])))
+  if(any(is.na(comm[ , value.var])))
      stop("No NAs in value.var allowed!")
   
   ## group data
-  gg <- rowSums(dfw[, group], na.rm = TRUE) 
+  gg <- rowSums(comm[, group], na.rm = TRUE) 
   xg <- x
-  xg$tcomm <- data.frame(dfw[ , c(hnames, 'taxon')], gg) 
+  xg$comm[ , 'gg'] <- gg
   cg <- rpkc_s(xg, value.var = 'gg')
   
-  # set amb taxa to zero
-  comm <- dfw[ , c('taxon', hnames, value.var)]
-  comm[cg$action == 'removed' , value.var] <- 0
   
-  # check if a amb taxon that is removed has no children
-  ambrm <- dfw[cg$action == 'removed' & dfw[, value.var] != 0, ]
-  levl <- ambrm$taxon == ambrm[, hnames]
-  ambrm$amblev <- names(ambrm[, hnames])[apply(levl, MARGIN = 1, 
+  # ambg parents that are removed
+  ambrm <- hier[cg$action == 'removed' & comm[, value.var] != 0, ]
+  # at which level
+  levl <- ambrm[ , taxa.var] == ambrm[ , names(ambrm) != taxa.var]
+  ambrm$amblev <- names(ambrm[ , names(ambrm) != taxa.var])[apply(levl, MARGIN = 1, 
                                                FUN = function(x) which(x))]
-  
   for(i in 1:nrow(ambrm)){
-    assg <- all(dfw[dfw[ , ambrm$amblev[i]] == ambrm$taxon[i] & 
-                      !is.na(dfw[ , ambrm$amblev[i]]) & 
-                      !dfw[, "taxon"] ==  ambrm$taxon[i], value.var] == 0)
+    # check if parent has no childs
+    assg <- all(comm[hier[ , ambrm$amblev[i]] == ambrm[i, taxa.var] & 
+                      !is.na(hier[ , ambrm$amblev[i]]) & 
+                      !hier[ , taxa.var] == ambrm[i, taxa.var], value.var] == 0)
     if(assg){
       # species where abu should be assigned
-      take <- dfw[dfw[ , ambrm$amblev[i]] == ambrm$taxon[i] & 
-                    !is.na(dfw[ , ambrm$amblev[i]]) & 
-                    !dfw[, "taxon"] ==  ambrm$taxon[i], ]
-      # do need to do this calc everstime
+      take <- comm[hier[ , ambrm$amblev[i]] == ambrm[i, taxa.var] & 
+                     !is.na(hier[ , ambrm$amblev[i]]) & 
+                     !hier[ , taxa.var] == ambrm[i, taxa.var], ]
+      #! no need to do this calc everstime
       ab <- rowSums(take[ , group])
       occ <- rowSums(take[ , group] > 0)
       # weights
@@ -74,9 +73,16 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
                   # K = ifelse(ab == max(ab), 1, 0),
                   C = ifelse(occ == max(occ), 1, 0))
       # what to assign
-      comm[comm[, 'taxon'] %in% take[ , 'taxon'], value.var] <- ambrm[i, value.var] * w
+      comm[comm[ , taxa.var] %in% take[ , taxa.var], value.var] <- comm[ambrm[i, taxa.var] == comm[ , taxa.var] , value.var] * w
     }
   }
+  
+  # set amb taxa to zero
+  comm[cg$action == 'removed' , value.var] <- 0
+  
+  
+  # keep only value.var
+  comm <- comm[ ,c(taxa.var, value.var)]
   
   method = paste0("RPKC-G-", option)
   # return
