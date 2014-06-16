@@ -73,7 +73,7 @@ test_that("MCWP-G works on whole data.frame", {
   expect_that(comm_o2[comm_o2$taxon == 'Zygoptera', "S3"], equals(10))
   expect_that(comm_o2[comm_o2$taxon == 'Zygoptera', "S4"], equals(108))
   #
-  expect_that(comm_c2[comm_c2$taxon == 'Acentrella', "S4", equals(0))
+  expect_that(comm_c2[comm_c2$taxon == 'Acentrella', "S4"], equals(0))
   expect_that(comm_c2[comm_c2$taxon == 'Baetidae', "S3"], equals(0))
   expect_that(comm_c2[comm_c2$taxon == 'Ephemeroptera', "S4"], equals(0))
   expect_that(comm_c2[comm_c2$taxon == 'Insecta', "S3"], equals(176))
