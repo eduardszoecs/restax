@@ -61,21 +61,27 @@ data(samp)
 samp
 ```
 
-First we need to retrieve taxonomic information about our taxa. 
-This is done via the `wide_class()` function, which uses [taxize](https://github.com/ropensci/taxize) to query ITIS:
-```{r, message=FALSE}
-df <- wide_class(samp, db = 'itis')
-df$tcomm
+
+`restax` currently accepts only the transposed wide format. So we reformat it
+```{r}
+df <- data.frame(t(samp), stringsAsFactors = FALSE)
+df[ , 'taxon'] <- rownames(df)
+df
 ```
-This
-+ transposed our data
-+ added taxomic information
-+ returns an object of class `wide_class`.
+
+
+First we need to retrieve taxonomic information about our taxa. 
+This is done via the `get_hier()` function,
+which uses [taxize](https://github.com/ropensci/taxize) to query ITIS:
+```{r, message=FALSE}
+df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+```
+We need to specify the column containing the taxon names.
+This function returns the original data and accompanying taxonomic information.
 
 To resolve ambiguous taxa using the `RPKC-S` method (remove parents, keep childs - per sample) for sample A we use:
-
 ```{r}
-df_res <- rpkc_s(df, value.var = 'A')
+df_res <- rpkc_s(df_w, value.var = 'A')
 df_res$comm
 ```
 We see that only the 5 Baetidae species and Argia sp. are kept, all others (as they are parents) are set to zero.
