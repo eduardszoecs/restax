@@ -218,82 +218,8 @@ df <- data.frame(t(samp[1:4, ]), stringsAsFactors = FALSE)
 df[ , 'taxon'] <- rownames(df)
 # get hierachy
 df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
-```
-
-```
-## 
-## Retrieving data for taxon 'Insecta'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Insecta
-## 
-## Retrieving data for taxon 'Ephemeroptera'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Ephemeroptera
-## 
-## Retrieving data for taxon 'Baetidae'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetidae
-## 
-## Retrieving data for taxon 'Acentrella'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Acentrella
-## 
-## Retrieving data for taxon 'Acentrella parvula'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Acentrella parvula
-## 
-## Retrieving data for taxon 'Acentrella turbida'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Acentrella turbida
-## 
-## Retrieving data for taxon 'Baetis'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetis
-## 
-## Retrieving data for taxon 'Baetis flavistriga'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetis flavistriga
-## 
-## Retrieving data for taxon 'Baetis intercalaris'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetis intercalaris
-## 
-## Retrieving data for taxon 'Baetis pluto'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetis pluto
-## 
-## Retrieving data for taxon 'Zygoptera'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Zygoptera
-## 
-## Retrieving data for taxon 'Argia'
-## 
-## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Argia
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=99208
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100502
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100755
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100801
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=609530
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=568574
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100800
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100835
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100808
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100858
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=102042
-## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=102139
-```
-
-```r
 # resolve
 df_rpmc <- rpmc_g(df_w)
-```
-
-```
-## Resovling all samples
-## Using all samples as group
-```
-
-```r
 # same as
 # rpmc_g(df_w, group = group = c('S1', 'S2', 'S3', 'S4'))
 df_rpmc$comm

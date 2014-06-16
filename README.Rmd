@@ -89,7 +89,7 @@ Similarly, all samples can be resolved with on call by omitting `value.var`. How
 
 Here we resolve all samples simultaneously using all samples as group using the `RPMC-G` variant:
 
-```{r}
+```{r, cache=TRUE, message=FALSE}
 # remove sample A
 df <- data.frame(t(samp[1:4, ]), stringsAsFactors = FALSE)
 df[ , 'taxon'] <- rownames(df)
