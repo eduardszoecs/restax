@@ -2,7 +2,8 @@
 #' 
 #' @param x list; An object of class wide_class as returned by 
 #' \code{\link[restax]{get_hier}}. 
-#' @param value.var character; Name of the column holding the abundances to resolve.
+#' @param value.var character; Which sampledf_w$ should be resolved.
+#' If \code{NULL} all samples are resolved.
 #' @param group character; Names of columns (=samples) for grouping.
 #' @param option character; Currently only C and L options are supported.
 #' @return a list of class 'restax', with the following elements
@@ -29,17 +30,17 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
     stop("Option K currently not implemented!")
   if(class(x) != 'wide_class')
     stop("Need an object of class 'wide_class'!")
-  if(is.null(value.var))
-    stop("Must specify value.var!")
-  if(is.null(group))
-    stop("Must specify group!")
   comm <- x[['comm']]
   hier <- x[['hier']]
   taxa.var <- x[['taxa.var']]
-  if(!value.var %in% names(comm))
+  if(is.null(value.var)){
+    message("Resovling all samples")
+    value.var <-  names(comm)[!names(comm) == taxa.var]
+  }
+  if(!all(value.var %in% names(comm)))
     stop("value.var not found in data")
   if(any(is.na(comm[ , value.var])))
-     stop("No NAs in value.var allowed!")
+    stop("No NAs in value.var allowed!")
   
   ## group data
   gg <- rowSums(comm[, group], na.rm = TRUE) 
@@ -47,46 +48,48 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
   xg$comm[ , 'gg'] <- gg
   cg <- rpkc_s(xg, value.var = 'gg')
   
-  
-  # ambg parents that are removed
-  ambrm <- hier[cg$action == 'removed' & comm[, value.var] != 0, ]
-  # at which level
-  levl <- ambrm[ , taxa.var] == ambrm[ , names(ambrm) != taxa.var]
-  ambrm$amblev <- names(ambrm[ , names(ambrm) != taxa.var])[apply(levl, MARGIN = 1, 
-                                               FUN = function(x) which(x))]
-  for(i in 1:nrow(ambrm)){
-    # check if parent has no childs
-    assg <- all(comm[hier[ , ambrm$amblev[i]] == ambrm[i, taxa.var] & 
-                      !is.na(hier[ , ambrm$amblev[i]]) & 
-                      !hier[ , taxa.var] == ambrm[i, taxa.var], value.var] == 0)
-    if(assg){
-      # species where abu should be assigned
-      take <- comm[hier[ , ambrm$amblev[i]] == ambrm[i, taxa.var] & 
-                     !is.na(hier[ , ambrm$amblev[i]]) & 
-                     !hier[ , taxa.var] == ambrm[i, taxa.var], ]
-      #! no need to do this calc everstime
-      ab <- rowSums(take[ , group])
-      occ <- rowSums(take[ , group] > 0)
-      # weights
-      w <- switch(option,
-                  L = ab / sum(ab),
-                  # K = ifelse(ab == max(ab), 1, 0),
-                  C = ifelse(occ == max(occ), 1, 0))
-      # what to assign
-      comm[comm[ , taxa.var] %in% take[ , taxa.var], value.var] <- comm[ambrm[i, taxa.var] == comm[ , taxa.var] , value.var] * w
+  commout <- comm
+  for(k in value.var){
+    # ambg parents that are removed
+    ambrm <- hier[cg$action == 'removed' & comm[ , k] != 0, ]
+    # at which level
+    levl <- ambrm[ , taxa.var] == ambrm[ , names(ambrm) != taxa.var]
+    ambrm$amblev <- names(ambrm[ , names(ambrm) != taxa.var])[apply(levl, MARGIN = 1, 
+                                                 FUN = function(x) which(x))]
+    for(i in 1:nrow(ambrm)){
+      # check if parent has no childs
+      assg <- all(comm[hier[ , ambrm$amblev[i]] == ambrm[i, taxa.var] & 
+                        !is.na(hier[ , ambrm$amblev[i]]) & 
+                        !hier[ , taxa.var] == ambrm[i, taxa.var], k] == 0)
+      if(assg){
+        # species where abu should be assigned
+        take <- comm[hier[ , ambrm$amblev[i]] == ambrm[i, taxa.var] & 
+                       !is.na(hier[ , ambrm$amblev[i]]) & 
+                       !hier[ , taxa.var] == ambrm[i, taxa.var], ]
+        #! no need to do this calc everstime
+        ab <- rowSums(take[ , group])
+        occ <- rowSums(take[ , group] > 0)
+        # weights
+        w <- switch(option,
+                    L = ab / sum(ab),
+                    # K = ...
+                    C = ifelse(occ == max(occ), 1, 0))
+        # what to assign
+        commout[commout[ , taxa.var] %in% take[ , taxa.var], k] <- commout[ambrm[i, taxa.var] == commout[ , taxa.var] , k] * w
+      }
     }
+    
+    # set amb taxa to zero
+    commout[cg$action == 'removed' , k] <- 0
   }
-  
-  # set amb taxa to zero
-  comm[cg$action == 'removed' , value.var] <- 0
   
   
   # keep only value.var
-  comm <- comm[ , c(taxa.var, value.var)]
+  commout <- commout[ , c(taxa.var, value.var)]
   
   method = paste0("RPKC-G-", option)
   # return
-  out <- list(comm = comm, action = cg$action, merged = NULL, method = method)
+  out <- list(comm = commout, action = cg$action, merged = NULL, method = method)
   class(out) <- 'restax'
   return(out) 
 }

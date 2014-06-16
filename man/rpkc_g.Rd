@@ -9,7 +9,8 @@ rpkc_g(x, value.var = NULL, group = NULL, option = c("C", "K", "L"))
 \item{x}{list; An object of class wide_class as returned by
 \code{\link[restax]{get_hier}}.}
 
-\item{value.var}{character; Name of the column holding the abundances to resolve.}
+\item{value.var}{character; Which sampledf_w$ should be resolved.
+If \code{NULL} all samples are resolved.}
 
 \item{group}{character; Names of columns (=samples) for grouping.}
 

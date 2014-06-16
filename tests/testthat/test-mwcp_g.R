@@ -83,6 +83,6 @@ test_that("MCWP-G works on whole data.frame", {
   expect_that(ncol(comm_c2), equals(ncol(df)))
   expect_that(ncol(comm_o2), equals(ncol(df)))
   
-  expect_that(all(rowSums(comm_f2[out_f2$action == 'removed', 1:5]) == 0), is_true())
+  expect_that(all(rowSums(comm_f2[out_f2$action == 'removed', 2:6]) == 0), is_true())
   expect_that(all(comm_f2[ ,taxa.var] == df[ ,taxa.var]), is_true())
 })
