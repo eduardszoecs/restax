@@ -65,7 +65,7 @@ test_that("RPKC-G works on whole data.frame", {
   expect_that(comm_l2[comm_l2$taxon == 'Acentrella', 'S3'], equals(0))
   expect_that(comm_l2[comm_l2$taxon == 'Baetidae', 'S3'], equals(0))
   expect_that(comm_l2[comm_l2$taxon == 'Acentrella parvula', 'S3'], equals(26))
-  expect_that(comm_l2[comm_l2$taxon == 'Acentrella turbida', 'S2'], equals(0))
+  expect_that(comm_l2[comm_l2$taxon == 'Acentrella turbida', 'S3'], equals(0))
   #
   expect_that(nrow(comm_l2), equals(nrow(df)))
   expect_that(nrow(comm_c2), equals(nrow(df)))
