@@ -19,8 +19,11 @@
 #' @examples
 #' \dontrun{
 #' data(samp)
-#' samp_w <- wide_class(samp)
-#' dpac_s(samp_w, value.var = 'A')
+#' # transpose data
+#' df <- data.frame(t(samp), stringsAsFactors = FALSE)
+#' df[ , 'taxon'] <- rownames(df)
+#' df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+#' dpac_s(df_w, value.var = 'A')
 #' }
 dpac_s <- function(x, value.var = NULL){
   if(class(x) != 'wide_class')
