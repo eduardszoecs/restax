@@ -79,14 +79,14 @@ rpmc_s <- function(x, value.var = NULL){
     if(nrow(mm) == 0)
       next
     ##
-    mm$do <- ifelse(mm[, value.var] < mm$s, 'remove', 'merge')
+    mm$do <- ifelse(mm[, value.var] < mm$s, 'removed', 'merge')
     # print(mm)
     
     #   remove or merge
     for(k in 1:nrow(mm)){
-      if(mm[k, 'do'] == 'remove'){
+      if(mm[k, 'do'] == 'removed'){
         comm[comm[ , taxa.var] == mm[k, p], value.var] <- 0
-        action[comm[ , taxa.var] == mm[k, p]] <- 'remove'
+        action[comm[ , taxa.var] == mm[k, p]] <- 'removed'
       }
       if(mm[k, 'do'] == 'merge'){
         comm[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), value.var] <- 0
