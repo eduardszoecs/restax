@@ -12,7 +12,8 @@ mcwp_g(x, value.var = NULL, group = NULL, level = "Family")
 \item{value.var}{character; Which sampledf_w$ should be resolved.
 If \code{NULL} all samples are resolved.}
 
-\item{group}{character; Names of columns (=samples) for grouping}
+\item{group}{character; Names of columns (=samples) for grouping.
+If \code{NULL} all samples are grouped.}
 
 \item{level}{character; Taxonomic level above taxa will be eliminated.
 Should be returned by \code{\link[restax]{get_hier}}, see hnames therein.}
@@ -38,6 +39,10 @@ df[ , 'taxon'] <- rownames(df)
 df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
 names(df_w$hier)
 mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Family')
+# same as using all samples for grouping
+mcwp_g(df_w, value.var = 'S3', level = 'Family')
+# Resolvle all samples
+mcwp_g(df_w, level = 'Family')
 mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Order')
 mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Class')
 }

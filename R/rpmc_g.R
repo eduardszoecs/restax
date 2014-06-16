@@ -4,7 +4,8 @@
 #' \code{\link[restax]{get_hier}}. 
 #' @param value.var character; Which sampledf_w$ should be resolved.
 #' If \code{NULL} all samples are resolved.
-#' @param group character; Names of columns (=samples) for grouping
+#' @param group character; Names of columns (=samples) for grouping.
+#' If \code{NULL} all samples are grouped.
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
 #'  \item comm - resolved community data matrix in wide format.
@@ -25,7 +26,10 @@
 #' df[ , 'taxon'] <- rownames(df)
 #' df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
 #' rpmc_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'))
-#' rpmc_g(df_w, group = c('S1', 'S2', 'S3', 'S4'))
+#' # using all samples for grouping
+#' rpmc_g(df_w, value.var = 'S3')
+#' # All samples at one time
+#' rpmc_g(df_w)
 #' }
 rpmc_g <- function(x, value.var = NULL, group = NULL){
   if(class(x) != 'wide_class')
@@ -41,6 +45,10 @@ rpmc_g <- function(x, value.var = NULL, group = NULL){
     stop("value.var not found in data")
   if(any(is.na(comm[ , value.var])))
     stop("No NAs in value.var allowed!")
+  if(is.null(group)){
+    message("Using all samples as group")
+    group <- names(comm)[!names(comm) == taxa.var]
+  }
   
   
   ## group data

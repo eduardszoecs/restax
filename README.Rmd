@@ -84,6 +84,28 @@ df_res$comm
 We see that only the 5 Baetidae species and Argia sp. are kept, all others (as they are parents) are set to zero.
 
 
+Similarly, all samples can be resolved with on call by omitting `value.var`. However, this currently works only with group variants
+`*_g()` . If `group` is ommited all samples are used as grouping variables.
+
+Here we resolve all samples simultaneously using all samples as group using the `RPMC-G` variant:
+
+```{r}
+# remove sample A
+df <- data.frame(t(samp[1:4, ]), stringsAsFactors = FALSE)
+df[ , 'taxon'] <- rownames(df)
+# get hierachy
+df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+# resolve
+df_rpmc <- rpmc_g(df_w)
+# same as
+# rpmc_g(df_w, group = group = c('S1', 'S2', 'S3', 'S4'))
+df_rpmc$comm
+```
+
+
+
+
+
 NOTES
 =============
 This package is currently under development and the code has not been tested extensively!
@@ -91,7 +113,7 @@ Moreover, there is some work needed to make the package more user friendly!
 
 It currently can reproduce the appendix of Cuffney et al. (2007), but may break with other data!
 
-Please use only ITIS as taxonomic backend, as others have not been tested yet.
+Please use only ITIS as taxonomic back-end, as others have not been tested yet.
 
 `dpac_g()` and `option='K'` are currently not available.
 

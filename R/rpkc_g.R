@@ -5,6 +5,7 @@
 #' @param value.var character; Which sampledf_w$ should be resolved.
 #' If \code{NULL} all samples are resolved.
 #' @param group character; Names of columns (=samples) for grouping.
+#' If \code{NULL} all samples are grouped.
 #' @param option character; Currently only C and L options are supported.
 #' @return a list of class 'restax', with the following elements
 #' \itemize{
@@ -21,18 +22,27 @@
 #' @examples
 #' \dontrun{
 #' data(samp)
-#' samp_w <- wide_class(samp)
-#' rpkc_g(samp_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'L')
-#' rpkc_g(samp_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'C')
+#' df <- samp[1:4, ]
+#' df <- data.frame(t(df), stringsAsFactors = FALSE)
+#' df[ , 'taxon'] <- rownames(df)
+#' df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+#' rpkc_g(df_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'L')
+#' # group all samples
+#' rpkc_g(df_w, value.var = 'S2', option = 'L')
+#' # all samples at once
+#' rpkc_g(df_w, option = 'L')
+#' rpkc_g(df_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'C')
 #' }
 rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L')){
   if(option == 'K')
     stop("Option K currently not implemented!")
   if(class(x) != 'wide_class')
     stop("Need an object of class 'wide_class'!")
+  
   comm <- x[['comm']]
   hier <- x[['hier']]
   taxa.var <- x[['taxa.var']]
+  
   if(is.null(value.var)){
     message("Resovling all samples")
     value.var <-  names(comm)[!names(comm) == taxa.var]
@@ -41,6 +51,10 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
     stop("value.var not found in data")
   if(any(is.na(comm[ , value.var])))
     stop("No NAs in value.var allowed!")
+  if(is.null(group)){
+    message("Using all samples as group")
+    group <- names(comm)[!names(comm) == taxa.var]
+  }
   
   ## group data
   gg <- rowSums(comm[, group], na.rm = TRUE) 

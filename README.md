@@ -1,6 +1,3 @@
-
-
-
 restax
 =============
 
@@ -209,6 +206,119 @@ df_res$comm
 We see that only the 5 Baetidae species and Argia sp. are kept, all others (as they are parents) are set to zero.
 
 
+Similarly, all samples can be resolved with on call by omitting `value.var`. However, this currently works only with group variants
+`*_g()` . If `group` is ommited all samples are used as grouping variables.
+
+Here we resolve all samples simultaneously using all samples as group using the `RPMC-G` variant:
+
+
+```r
+# remove sample A
+df <- data.frame(t(samp[1:4, ]), stringsAsFactors = FALSE)
+df[ , 'taxon'] <- rownames(df)
+# get hierachy
+df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+```
+
+```
+## 
+## Retrieving data for taxon 'Insecta'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Insecta
+## 
+## Retrieving data for taxon 'Ephemeroptera'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Ephemeroptera
+## 
+## Retrieving data for taxon 'Baetidae'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetidae
+## 
+## Retrieving data for taxon 'Acentrella'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Acentrella
+## 
+## Retrieving data for taxon 'Acentrella parvula'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Acentrella parvula
+## 
+## Retrieving data for taxon 'Acentrella turbida'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Acentrella turbida
+## 
+## Retrieving data for taxon 'Baetis'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetis
+## 
+## Retrieving data for taxon 'Baetis flavistriga'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetis flavistriga
+## 
+## Retrieving data for taxon 'Baetis intercalaris'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetis intercalaris
+## 
+## Retrieving data for taxon 'Baetis pluto'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Baetis pluto
+## 
+## Retrieving data for taxon 'Zygoptera'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Zygoptera
+## 
+## Retrieving data for taxon 'Argia'
+## 
+## http://www.itis.gov/ITISWebService/services/ITISService/getITISTermsFromScientificName?srchKey=Argia
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=99208
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100502
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100755
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100801
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=609530
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=568574
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100800
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100835
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100808
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=100858
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=102042
+## http://www.itis.gov/ITISWebService/services/ITISService/getFullHierarchyFromTSN?tsn=102139
+```
+
+```r
+# resolve
+df_rpmc <- rpmc_g(df_w)
+```
+
+```
+## Resovling all samples
+## Using all samples as group
+```
+
+```r
+# same as
+# rpmc_g(df_w, group = group = c('S1', 'S2', 'S3', 'S4'))
+df_rpmc$comm
+```
+
+```
+##                  taxon S1 S2 S3  S4
+## 11             Insecta  0  0  0   0
+## 10       Ephemeroptera  0  0  0   0
+## 5             Baetidae  0  0  0   0
+## 1           Acentrella  0  0  0   0
+## 2   Acentrella parvula 34  0 26  11
+## 3   Acentrella turbida  3  0  0   9
+## 6               Baetis  0  0  0   0
+## 7   Baetis flavistriga 54  0  0   6
+## 8  Baetis intercalaris 78 21  0   0
+## 9         Baetis pluto 23 23  0  12
+## 12           Zygoptera  0  0 10 108
+## 4                Argia  0  0  0   0
+```
+
+
+
+
+
 NOTES
 =============
 This package is currently under development and the code has not been tested extensively!
@@ -216,7 +326,7 @@ Moreover, there is some work needed to make the package more user friendly!
 
 It currently can reproduce the appendix of Cuffney et al. (2007), but may break with other data!
 
-Please use only ITIS as taxonomic backend, as others have not been tested yet.
+Please use only ITIS as taxonomic back-end, as others have not been tested yet.
 
 `dpac_g()` and `option='K'` are currently not available.
 

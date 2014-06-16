@@ -4,7 +4,8 @@
 #' \code{\link[restax]{get_hier}}. 
 #' @param value.var character; Which sampledf_w$ should be resolved.
 #' If \code{NULL} all samples are resolved.
-#' @param group character; Names of columns (=samples) for grouping
+#' @param group character; Names of columns (=samples) for grouping.
+#' If \code{NULL} all samples are grouped.
 #' @param level character; Taxonomic level above taxa will be eliminated. 
 #'  Should be returned by \code{\link[restax]{get_hier}}, see hnames therein.
 #' @return a list of class 'restax', with the following elements
@@ -28,6 +29,10 @@
 #' df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
 #' names(df_w$hier)
 #' mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Family')
+#' # same as using all samples for grouping
+#' mcwp_g(df_w, value.var = 'S3', level = 'Family')
+#' # Resolvle all samples 
+#' mcwp_g(df_w, level = 'Family')
 #' mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Order')
 #' mcwp_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'), level = 'Class')
 #' }
@@ -45,6 +50,10 @@ mcwp_g <- function(x, value.var = NULL, group = NULL, level = 'Family'){
     stop("value.var not found in data")
   if(any(is.na(comm[ , value.var])))
     stop("No NAs in value.var allowed!")
+  if(is.null(group)){
+    message("Using all samples as group")
+    group <- names(comm)[!names(comm) == taxa.var]
+  }
   
   ## group data
   gg <- rowSums(comm[, group], na.rm = TRUE) 

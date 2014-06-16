@@ -12,7 +12,8 @@ rpkc_g(x, value.var = NULL, group = NULL, option = c("C", "K", "L"))
 \item{value.var}{character; Which sampledf_w$ should be resolved.
 If \code{NULL} all samples are resolved.}
 
-\item{group}{character; Names of columns (=samples) for grouping.}
+\item{group}{character; Names of columns (=samples) for grouping.
+If \code{NULL} all samples are grouped.}
 
 \item{option}{character; Currently only C and L options are supported.}
 }
@@ -30,9 +31,16 @@ Remove Parents Keep Children - Group variant
 \examples{
 \dontrun{
 data(samp)
-samp_w <- wide_class(samp)
-rpkc_g(samp_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'L')
-rpkc_g(samp_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'C')
+df <- samp[1:4, ]
+df <- data.frame(t(df), stringsAsFactors = FALSE)
+df[ , 'taxon'] <- rownames(df)
+df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+rpkc_g(df_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'L')
+# group all samples
+rpkc_g(df_w, value.var = 'S2', option = 'L')
+# all samples at once
+rpkc_g(df_w, option = 'L')
+rpkc_g(df_w, value.var = 'S2', group = c('S1', 'S2', 'S3', 'S4'), option = 'C')
 }
 }
 \references{
