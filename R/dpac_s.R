@@ -49,10 +49,13 @@ dpac_s <- function(x, value.var = NULL){
     childs <- !is.na(y[ , which(names(y) == i) + 1])
     parent <- !childs
     if(sum(y[childs, value.var]) == 0 | all(childs)){
+      # no action
       return(y)
     } else {
+      # add parents to childs (wighted)
       w <- y[childs, value.var] / sum(y[childs, value.var])
       y[childs, value.var] <- y[childs, value.var]  + y[parent, value.var] * w
+      # rm parents
       y[parent, value.var] <- 0
       y$ambp[parent] <- TRUE
       return(y)
@@ -61,6 +64,7 @@ dpac_s <- function(x, value.var = NULL){
   wdf <- cbind(hier, comm)
   wdf$ambp <- FALSE
   for(i in lev[-1]){
+    # loop throug all parent - child combinations
     wdf <- ddply(wdf, i, foo,value.var)
   }
       
