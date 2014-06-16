@@ -8,6 +8,7 @@
 #'  \item comm - resolved community data matrix in wide format.
 #'  \item action - what was done with the taxon
 #'  \item merged - is the taxon merged
+#'  \item method - method to resolve taxa
 #' }
 #' @references Cuffney, T. F., Bilger, M. D. & Haigler, A. M. 
 #' Ambiguous taxa: effects on the characterization and interpretation of 
@@ -18,38 +19,39 @@
 #' @examples
 #' \dontrun{
 #' data(samp)
-#' samp_w <- wide_class(samp)
-#' rpmc_s(samp_w, value.var = 'A')
+#' # transpose data
+#' df <- data.frame(t(samp), stringsAsFactors = FALSE)
+#' df[ , 'taxon'] <- rownames(df)
+#' df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+#' rpmc_s(df_w, value.var = 'A')
 #' }
 rpmc_s <- function(x, value.var = NULL){
   if(class(x) != 'wide_class')
     stop("Need an object of class 'wide_class'!")
   if(is.null(value.var))
     stop("Must specify value.var!")
-  dfw <- x[[1]]
-  hnames <- x[[2]]
-  if(!value.var %in% names(dfw))
+  comm <- x[['comm']]
+  hier <- x[['hier']]
+  taxa.var <- x[['taxa.var']]
+  if(!value.var %in% names(comm))
     stop("value.var not found in data")
-  
-  if(any(is.na(dfw[ , value.var])))
+  if(any(is.na(comm[ , value.var])))
     stop("No NAs in value.var allowed!")
   
-  dfw <- dfw[c('taxon', hnames, value.var)]
-  # rm not diff levels
-  keep <- apply(dfw, 2, function(x) any(is.na(x)))
-  keep[value.var] <- TRUE
+  # rm not indiff levels
+  keep <- apply(hier, 2, function(x) any(is.na(x)))
   # keep last level
   keep[rle(keep)$lengths[1]] <- TRUE
   # keep taxon
-  keep['taxon'] <- TRUE
-  dfw <- dfw[, keep]
-  hnames <- hnames[hnames %in% names(keep[keep == TRUE])]
+  keep[taxa.var] <- TRUE
+  hier <- hier[, keep]
   
+  run <- rev(names(hier))
+  run <- run[!run %in% taxa.var]
   
-  run <- rev(hnames)
-  comm <- dfw
-  action <- rep(NA, nrow(comm))
-  merged <- data.frame(taxon = dfw[ , "taxon"], with = NA)
+  commout <- comm
+  action <- rep(NA, nrow(commout))
+  merged <- data.frame(taxon = hier[ , taxa.var], with = NA)
   
   # loop through each parent-child pair
   for(i in seq_along(run)[-1]){
@@ -59,7 +61,8 @@ rpmc_s <- function(x, value.var = NULL){
     #     print(ch)
     
     # determine childs and parents
-    take <- dfw[!is.na(dfw[ , p]) ,c(p, ch, value.var)]
+    mmm <- merge(hier, comm)  
+    take <- mmm[!is.na(mmm[ , p]) , c(p, ch, value.var)]
     #     print(take)
     #   # sum of childres
     sum_c <- ddply(take[!is.na(take[ , ch]), ], p, 
@@ -82,18 +85,21 @@ rpmc_s <- function(x, value.var = NULL){
     #   remove or merge
     for(k in 1:nrow(mm)){
       if(mm[k, 'do'] == 'remove'){
-        comm[comm$taxon == mm[k, p], value.var] <- 0
-        action[comm$taxon == mm[k, p]] <- 'remove'
+        comm[comm[ , taxa.var] == mm[k, p], value.var] <- 0
+        action[comm[ , taxa.var] == mm[k, p]] <- 'remove'
       }
       if(mm[k, 'do'] == 'merge'){
-        comm[comm[ , p] == mm[k, p] & !is.na(comm[ , p]), value.var] <- 0
-        comm[comm$taxon == mm[k, p], value.var] <- mm[ , value.var] + mm[ , "s"]
-        action[comm[ , p] == mm[k, p] & !is.na(comm[ , p])] <- 'merge'
-        merged[comm[ , p] == mm[k, p] & !is.na(comm[ , p]), 'with'] <- mm[k , p]
+        comm[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), value.var] <- 0
+        comm[comm[ , taxa.var] == mm[k, p], value.var] <- mm[ , value.var] + mm[ , "s"]
+        action[hier[ , p] == mm[k, p] & !is.na(hier[ , p])] <- 'merge'
+        merged[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), 'with'] <- mm[k , p]
       }
     } 
   }
   action[is.na(action)] <- 'keep'
+  
+  # keep only value.var
+  comm <- comm[ ,c(taxa.var, value.var)]
   
   method <- 'RPMC-S'
   out <- list(comm = comm, action = action, merged = merged, 

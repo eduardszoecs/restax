@@ -19,6 +19,7 @@ a list of class 'restax', with the following elements
  \item comm - resolved community data matrix in wide format.
  \item action - what was done with the taxon
  \item merged - is the taxon merged
+ \item method - method to resolve taxa
 }
 }
 \description{
@@ -27,7 +28,10 @@ Remove Parent or Merge Child (RPMC) - Group variant.
 \examples{
 \dontrun{
 data(samp)
-samp_w <- wide_class(samp)
+# transpose data
+df <- data.frame(t(samp), stringsAsFactors = FALSE)
+df[ , 'taxon'] <- rownames(df)
+df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
 rpmc_g(samp_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'))
 }
 }

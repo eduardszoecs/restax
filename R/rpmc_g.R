@@ -9,6 +9,7 @@
 #'  \item comm - resolved community data matrix in wide format.
 #'  \item action - what was done with the taxon
 #'  \item merged - is the taxon merged
+#'  \item method - method to resolve taxa
 #' }
 #' @references Cuffney, T. F., Bilger, M. D. & Haigler, A. M. 
 #' Ambiguous taxa: effects on the characterization and interpretation of 
@@ -18,7 +19,10 @@
 #' @examples
 #' \dontrun{
 #' data(samp)
-#' samp_w <- wide_class(samp)
+#' # transpose data
+#' df <- data.frame(t(samp), stringsAsFactors = FALSE)
+#' df[ , 'taxon'] <- rownames(df)
+#' df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
 #' rpmc_g(samp_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'))
 #' }
 rpmc_g <- function(x, value.var = NULL, group = NULL){
@@ -26,28 +30,31 @@ rpmc_g <- function(x, value.var = NULL, group = NULL){
     stop("Need an object of class 'wide_class'!")
   if(is.null(value.var))
     stop("Must specify value.var!")
-  dfw <- x[[1]]
-  hnames <- x[[2]]
-  if(!value.var %in% names(dfw))
+  comm <- x[['comm']]
+  hier <- x[['hier']]
+  taxa.var <- x[['taxa.var']]
+  if(!value.var %in% names(comm))
     stop("value.var not found in data")
-  
-  if(any(is.na(dfw[ , value.var])))
+  if(any(is.na(comm[ , value.var])))
     stop("No NAs in value.var allowed!")
   
   
   ## group data
-  gg <- rowSums(dfw[, group], na.rm = TRUE) 
+  gg <- rowSums(comm[, group], na.rm = TRUE) 
   xg <- x
-  xg$tcomm <- data.frame(dfw[ , c(hnames, 'taxon')], gg) 
+  xg$comm[ , 'gg'] <- gg
   cg <- rpmc_s(xg, value.var = 'gg')
+  comm_agg <- merge(comm, cg$merged, by = taxa.var)
   
-  comm <- dfw[ , c('taxon', hnames, value.var)]
   # rm taxa
-  comm[cg$action == 'remove' ,value.var] <- 0
+  comm[cg$action == 'remove' , value.var] <- 0
   # merge taxa
-  comm_agg <- merge(comm, cg$merged, by = 'taxon')
+  comm_agg <- merge(comm, cg$merged, by = taxa.var)
   agg <- aggregate(comm_agg[, value.var], list(taxon = comm_agg[ , "with"]), sum)
-  comm[comm$taxon %in% agg$taxon , value.var] <- agg$x
+  comm[comm[ , taxa.var] %in% agg$taxon , value.var] <- agg$x
+  
+  # keep only value.var
+  comm <- comm[ ,c(taxa.var, value.var)]
   
   method = paste0('RPMC-G')
   out <- list(comm = comm, action = cg$action, merged = cg$merged, 
