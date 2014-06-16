@@ -1,8 +1,3 @@
-```{r set_global_opts, cache=FALSE, echo=FALSE}
-opts_chunk$set(cache=TRUE, autodep=TRUE)
-```
-
-
 restax
 =============
 
@@ -62,7 +57,7 @@ samp
 ```
 
 
-`restax` currently accepts only the transposed wide format. So we reformat it
+`restax` currently accepts only the transposed wide format. So we need to reformat it
 ```{r}
 df <- data.frame(t(samp), stringsAsFactors = FALSE)
 df[ , 'taxon'] <- rownames(df)
@@ -70,11 +65,13 @@ df
 ```
 
 
-First we need to retrieve taxonomic information about our taxa. 
+The first step is to retrieve taxonomic information about our taxa:
+
 This is done via the `get_hier()` function,
 which uses [taxize](https://github.com/ropensci/taxize) to query ITIS:
-```{r, message=FALSE}
+```{r, message=FALSE, cache=TRUE}
 df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+df_w
 ```
 We need to specify the column containing the taxon names.
 This function returns the original data and accompanying taxonomic information.

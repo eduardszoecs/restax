@@ -83,7 +83,7 @@ samp
 ```
 
 
-`restax` currently accepts only the transposed wide format. So we reformat it
+`restax` currently accepts only the transposed wide format. So we need to reformat it
 
 ```r
 df <- data.frame(t(samp), stringsAsFactors = FALSE)
@@ -108,12 +108,78 @@ df
 ```
 
 
-First we need to retrieve taxonomic information about our taxa. 
+The first step is to retrieve taxonomic information about our taxa:
+
 This is done via the `get_hier()` function,
 which uses [taxize](https://github.com/ropensci/taxize) to query ITIS:
 
 ```r
 df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
+df_w
+```
+
+```
+## $comm
+##    S1 S2  S3  S4   A               taxon
+## 11  0  6   0   0   6             Insecta
+## 10  0  0 100   0 100       Ephemeroptera
+## 5   4  0   0   8  12            Baetidae
+## 1  10 30   5   0  45          Acentrella
+## 2  34  0  26  11  71  Acentrella parvula
+## 3   3  0   0   9  12  Acentrella turbida
+## 6   0 44  35 100 179              Baetis
+## 7  54  0   0   6  60  Baetis flavistriga
+## 8  78 21   0   0  99 Baetis intercalaris
+## 9  23 23   0  12  58        Baetis pluto
+## 12  0  0  10 100 110           Zygoptera
+## 4   0  0   0   8   8               Argia
+## 
+## $hier
+##     Kingdom Subkingdom Infrakingdom Superphylum     Phylum Subphylum
+## 11 Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 10 Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 5  Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 1  Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 2  Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 3  Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 6  Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 7  Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 8  Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 9  Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 12 Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+## 4  Animalia  Bilateria  Protostomia   Ecdysozoa Arthropoda  Hexapoda
+##      Class  Subclass  Infraclass         Order   Suborder         Family
+## 11 Insecta      <NA>        <NA>          <NA>       <NA>           <NA>
+## 10 Insecta Pterygota Palaeoptera Ephemeroptera       <NA>           <NA>
+## 5  Insecta Pterygota Palaeoptera Ephemeroptera Pisciforma       Baetidae
+## 1  Insecta Pterygota Palaeoptera Ephemeroptera Pisciforma       Baetidae
+## 2  Insecta Pterygota Palaeoptera Ephemeroptera Pisciforma       Baetidae
+## 3  Insecta Pterygota Palaeoptera Ephemeroptera Pisciforma       Baetidae
+## 6  Insecta Pterygota Palaeoptera Ephemeroptera Pisciforma       Baetidae
+## 7  Insecta Pterygota Palaeoptera Ephemeroptera Pisciforma       Baetidae
+## 8  Insecta Pterygota Palaeoptera Ephemeroptera Pisciforma       Baetidae
+## 9  Insecta Pterygota Palaeoptera Ephemeroptera Pisciforma       Baetidae
+## 12 Insecta Pterygota Palaeoptera       Odonata  Zygoptera           <NA>
+## 4  Insecta Pterygota Palaeoptera       Odonata  Zygoptera Coenagrionidae
+##         Genus             Species               taxon
+## 11       <NA>                <NA>             Insecta
+## 10       <NA>                <NA>       Ephemeroptera
+## 5        <NA>                <NA>            Baetidae
+## 1  Acentrella                <NA>          Acentrella
+## 2  Acentrella  Acentrella parvula  Acentrella parvula
+## 3  Acentrella  Acentrella turbida  Acentrella turbida
+## 6      Baetis                <NA>              Baetis
+## 7      Baetis  Baetis flavistriga  Baetis flavistriga
+## 8      Baetis Baetis intercalaris Baetis intercalaris
+## 9      Baetis        Baetis pluto        Baetis pluto
+## 12       <NA>                <NA>           Zygoptera
+## 4       Argia                <NA>               Argia
+## 
+## $taxa.var
+## [1] "taxon"
+## 
+## attr(,"class")
+## [1] "wide_class"
 ```
 We need to specify the column containing the taxon names.
 This function returns the original data and accompanying taxonomic information.
