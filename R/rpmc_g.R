@@ -62,7 +62,7 @@ rpmc_g <- function(x, value.var = NULL, group = NULL){
   commout[cg$action == 'keep', ] <- comm[cg$action == 'keep', ] 
   
   # keep only value.var
-  commout <- commout[ ,c(taxa.var, value.var)]
+  commout <- commout[ , c(taxa.var, value.var)]
   
   method = paste0('RPMC-G')
   out <- list(comm = commout, action = cg$action, merged = cg$merged, 

@@ -82,7 +82,7 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
   
   
   # keep only value.var
-  comm <- comm[ ,c(taxa.var, value.var)]
+  comm <- comm[ , c(taxa.var, value.var)]
   
   method = paste0("RPKC-G-", option)
   # return

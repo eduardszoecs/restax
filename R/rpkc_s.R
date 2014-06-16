@@ -61,7 +61,7 @@ rpkc_s <- function(x, value.var = NULL){
   comm[ambp , value.var] <- 0
   
   # keep only value.var
-  comm <- comm[ ,c(taxa.var, value.var)]
+  comm <- comm[ , c(taxa.var, value.var)]
   
   
   out <- list(comm = comm, action = ifelse(ambp, "removed", "keep") , merged = NULL, method = 'RPKC-S')

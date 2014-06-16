@@ -99,7 +99,7 @@ rpmc_s <- function(x, value.var = NULL){
   action[is.na(action)] <- 'keep'
   
   # keep only value.var
-  comm <- comm[ ,c(taxa.var, value.var)]
+  comm <- comm[ , c(taxa.var, value.var)]
   
   method <- 'RPMC-S'
   out <- list(comm = comm, action = action, merged = merged, 

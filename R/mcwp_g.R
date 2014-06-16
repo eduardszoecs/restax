@@ -2,7 +2,8 @@
 #' 
 #' @param x list; An object of class wide_class as returned by 
 #' \code{\link[restax]{get_hier}}. 
-#' @param value.var character; Name of the column holding the abundances to resolve
+#' @param value.var character; Which sampledf_w$ should be resolved.
+#' If \code{NULL} all samples are resolved.
 #' @param group character; Names of columns (=samples) for grouping
 #' @param level character; Taxonomic level above taxa will be eliminated. 
 #'  Should be returned by \code{\link[restax]{get_hier}}, see hnames therein.
@@ -33,12 +34,14 @@
 mcwp_g <- function(x, value.var = NULL, group = NULL, level = 'Family'){
   if(class(x) != 'wide_class')
     stop("Need an object of class 'wide_class'!")
-  if(is.null(value.var))
-    stop("Must specify value.var!")
   comm <- x[['comm']]
   hier <- x[['hier']]
   taxa.var <- x[['taxa.var']]
-  if(!value.var %in% names(comm))
+  if(is.null(value.var)){
+    message("Resovling all samples")
+    value.var <-  names(comm)[!names(comm) == taxa.var]
+  }
+  if(!all(value.var %in% names(comm)))
     stop("value.var not found in data")
   if(any(is.na(comm[ , value.var])))
     stop("No NAs in value.var allowed!")
@@ -50,16 +53,19 @@ mcwp_g <- function(x, value.var = NULL, group = NULL, level = 'Family'){
   cg <- mcwp_s(xg, value.var = 'gg', level = level)
   
   comm_agg <- merge(comm, cg$merged, by = taxa.var)
-  agg <- aggregate(comm_agg[, value.var], list(taxon = comm_agg[ , "with"]), sum)
-  commout <- merge(comm, agg, all = TRUE)
-  commout[ , value.var] <- commout[ , "x"]
-  commout[is.na(commout[ , value.var]) , value.var] <- 0
+  agg <- aggregate(comm_agg[value.var], list(taxon = comm_agg[ , "with"]), sum)
   
-  # keep only value.var
-  commout <- commout[ ,c(taxa.var, value.var)]
+  # rm taxa
+  commout <- comm
+  commout[, value.var] <- 0
+  
+  commout[match(agg$taxon, commout[ , taxa.var]) , value.var]  <- agg[ , value.var]
   
   # restore order
   commout <- commout[match(comm[ , taxa.var], commout[ , taxa.var]), ]
+  
+  # keep only value.var
+  commout <- commout[ , c(taxa.var, value.var)]
   
   method = paste0('MCWP-G-', level)
   out <- list(comm = commout, action = cg$action, merged = cg$merged, 

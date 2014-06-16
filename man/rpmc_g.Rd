@@ -9,7 +9,7 @@ rpmc_g(x, value.var = NULL, group = NULL)
 \item{x}{list; An object of class wide_class as returned by
 \code{\link[restax]{get_hier}}.}
 
-\item{value.var}{character; Which sample should be resolved.
+\item{value.var}{character; Which sampledf_w$ should be resolved.
 If \code{NULL} all samples are resolved.}
 
 \item{group}{character; Names of columns (=samples) for grouping}
@@ -33,7 +33,8 @@ data(samp)
 df <- data.frame(t(samp), stringsAsFactors = FALSE)
 df[ , 'taxon'] <- rownames(df)
 df_w <- get_hier(df, taxa.var = 'taxon', db = 'itis')
-rpmc_g(samp_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'))
+rpmc_g(df_w, value.var = 'S3', group = c('S1', 'S2', 'S3', 'S4'))
+rpmc_g(df_w, group = c('S1', 'S2', 'S3', 'S4'))
 }
 }
 \references{

@@ -39,10 +39,7 @@ test_that("RPMC-G works on whole data.frame", {
   expect_that(ncol(comm2), equals(ncol(df)))
   expect_that(all(rowSums(comm2[out2$action == 'removed', 2:6]) == 0), is_true())
   expect_that(all(comm2[out2$action == 'keep', 2:6] == df_w$comm[out2$action == 'keep', 1:5]), is_true())
+  expect_that(all(comm2[ ,taxa.var] == df[ ,taxa.var]), is_true())
 })
 
-test_that("RPMC-S returns correct object", {
-  expect_that(nrow(comm), equals(nrow(df)))
-  expect_that(ncol(comm), equals(2))
-  expect_that(all(comm[ ,taxa.var] == df[ ,taxa.var]), is_true())
-})
+

@@ -82,7 +82,7 @@ mcwp_s <- function(x, value.var = NULL, level = 'Family'){
   merged$with <- keep[match(hier[ , level], keep[, level]), taxa.var]
   
   # keep only value.var
-  comm <- comm[ ,c(taxa.var, value.var)]
+  comm <- comm[ , c(taxa.var, value.var)]
   
   
   method <- paste0('MCWP-S-', level)
