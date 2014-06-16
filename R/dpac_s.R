@@ -43,45 +43,37 @@ dpac_s <- function(x, value.var = NULL){
   keep[taxa.var] <- TRUE
   hier <- hier[, keep]
   
-  # determine amb parents
-  run <- rev(names(hier))
-  run <- run[!run %in% c(taxa.var, "Species")]
-  ambp <- rep(FALSE, nrow(comm)) # amb parent
-  child <- !is.na(hier[ , 'Species'])
-  for(lev in run){
-    parents <- unique(hier[child, lev])
-    ambp <- ambp | hier[ , lev] %in% parents & !child
-    child <- !is.na(hier[ , lev])
-  }
-  # print(ambp)
-  
-  
-  # add parent abundance proportianally to childs
+  lev <- rev(names(hier))
+  lev <- lev[!lev %in% taxa.var]
   foo <- function(y, value.var){
-    childs <- y[y$ambp == FALSE , ]
-    parent <- y[y$ambp == TRUE & y[ , value.var] > 0, ]
-    if(nrow(parent) > 0 & nrow(childs) > 0){
-      new <- childs[ , value.var] + parent[, value.var] * childs[ , value.var] / sum(childs[ , value.var])
-      y[y[ , "taxon"] %in% childs[ ,"taxon"]  , value.var] <- new
-      y[y[ , "taxon"] %in% parent[ ,"taxon"]  , value.var] <- 0
+    childs <- !is.na(y[ , which(names(y) == i) + 1])
+    parent <- !childs
+    if(sum(y[childs, value.var]) == 0 | all(childs)){
+      return(y)
+    } else {
+      w <- y[childs, value.var] / sum(y[childs, value.var])
+      y[childs, value.var] <- y[childs, value.var]  + y[parent, value.var] * w
+      y[parent, value.var] <- 0
+      y$ambp[parent] <- TRUE
+      return(y)
     }
-    return(y)
   }
-  
-  tmp <- data.frame(comm , hier, ambp)
-  for(i in run){
-    tmp <- ddply(tmp, i, .fun = foo, value.var)
+  wdf <- cbind(hier, comm)
+  wdf$ambp <- FALSE
+  for(i in lev[-1]){
+    wdf <- ddply(wdf, i, foo,value.var)
   }
+      
   # restore order
-  tmp <- tmp[match(comm[ , taxa.var], tmp[, taxa.var]), ]
+  wdf <- wdf[match(comm[ , taxa.var], wdf[, taxa.var]), ]
   
   # keep only value.var
-  comm <- tmp[ ,c(taxa.var, value.var)]
+  commout <- wdf[ , c(taxa.var, value.var)]
   
   method <- 'DPAC-S'
-  action <- ifelse(tmp$ambp, 'removed', 'added')
+  action <- ifelse(wdf$ambp, 'removed', 'added')
   merged <- NULL
-  out <- list(comm = comm, action = action, merged = merged, 
+  out <- list(comm = commout, action = action, merged = merged, 
               method = method)
   class(out) <- 'restax'
   return(out) 
