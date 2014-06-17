@@ -58,7 +58,7 @@ mcwp_g <- function(x, value.var = NULL, group = NULL, level = 'Family'){
   ## group data
   gg <- rowSums(comm[, group], na.rm = TRUE) 
   xg <- x
-  xg$comm[ , 'gg'] <- gg
+  xg$comm <- data.frame(comm[taxa.var] , gg)
   cg <- mcwp_s(xg, value.var = 'gg', level = level)
   
   comm_agg <- merge(comm, cg$merged, by = taxa.var)

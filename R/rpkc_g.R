@@ -59,7 +59,7 @@ rpkc_g <- function(x, value.var = NULL, group = NULL, option = c('C', 'K', 'L'))
   ## group data
   gg <- rowSums(comm[, group], na.rm = TRUE) 
   xg <- x
-  xg$comm[ , 'gg'] <- gg
+  xg$comm <- data.frame(comm[taxa.var] , gg)
   cg <- rpkc_s(xg, value.var = 'gg')
   
   commout <- comm
