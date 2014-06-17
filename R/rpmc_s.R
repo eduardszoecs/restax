@@ -65,9 +65,12 @@ rpmc_s <- function(x, value.var = NULL){
     # determine childs and parents
     mmm <- merge(hier, commout)  
     take <- mmm[!is.na(mmm[ , p]) , c(p, ch, value.var)]
-    #     print(take)
-    #   # sum of childres
-    sum_c <- ddply(take[!is.na(take[ , ch]), ], p, 
+    
+    sna <- apply(take, 1, function(x) sum(is.na(x)))
+    parents <- is.na(take[ , ch]) & sna == max(sna)
+    childs <- !parents
+
+    sum_c <- ddply(take[childs, ], p, 
                    .fun = function(x, col) {
                      s = sum(x[ , col])
                      n = length(x[ , col])
@@ -75,7 +78,7 @@ rpmc_s <- function(x, value.var = NULL){
                    }, 
                    value.var)
     # print(sum_c)
-    sum_p <- take[is.na(take[ , ch]), ]
+    sum_p <- take[parents, ]
     # compare child abundance with parent abundance
     mm <- merge(sum_p, sum_c)
     if(nrow(mm) == 0)
