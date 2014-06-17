@@ -110,7 +110,7 @@ rpmc_s <- function(x, value.var = NULL){
         commout[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), value.var] <- 0
         commout[comm[ , taxa.var] == mm[k, p], value.var] <- mm[k , value.var] + mm[k , "sum_childs"]
         action[hier[ , p] == mm[k, p] & !is.na(hier[ , p])] <- 'merge'
-        merged[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), 'with'] <- mm[k , p]
+        merged[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), 'with'] <- mm[k , taxa.var]
       }
     } 
     co <- mm[mm$do == 'removed' & mm[, value.var] > 0, c(taxa.var, value.var)]
