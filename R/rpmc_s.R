@@ -52,6 +52,8 @@ rpmc_s <- function(x, value.var = NULL){
   commout <- comm
   action <- rep(NA, nrow(commout))
   merged <- data.frame(hier[taxa.var], with = NA)
+  # carry over
+  co <- 0
   
   # loop through each parent-child pair
   for(i in seq_along(run)[-1]){
@@ -81,20 +83,23 @@ rpmc_s <- function(x, value.var = NULL){
     ##
     mm$do <- ifelse(mm[, value.var] < mm$s, 'removed', 'merge')
     # print(mm)
-    
+    # print(co)
     #   remove or merge
     for(k in 1:nrow(mm)){
       if(mm[k, 'do'] == 'removed'){
+        co <- commout[commout[ , taxa.var] == mm[k, p], value.var]
         commout[commout[ , taxa.var] == mm[k, p], value.var] <- 0
         action[commout[ , taxa.var] == mm[k, p]] <- 'removed'
       }
       if(mm[k, 'do'] == 'merge'){
         commout[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), value.var] <- 0
-        commout[comm[ , taxa.var] == mm[k, p], value.var] <- mm[k , value.var] + mm[k , "s"]
+        commout[comm[ , taxa.var] == mm[k, p], value.var] <- mm[k , value.var] + mm[k , "s"] + co
+        co <- 0
         action[hier[ , p] == mm[k, p] & !is.na(hier[ , p])] <- 'merge'
         merged[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), 'with'] <- mm[k , p]
       }
     } 
+    # print(commout)
   }
   action[is.na(action)] <- 'keep'
   
