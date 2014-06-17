@@ -51,7 +51,7 @@ rpmc_s <- function(x, value.var = NULL){
   
   commout <- comm
   action <- rep(NA, nrow(commout))
-  merged <- data.frame(taxon = hier[ , taxa.var], with = NA)
+  merged <- data.frame(hier[taxa.var], with = NA)
   
   # loop through each parent-child pair
   for(i in seq_along(run)[-1]){
