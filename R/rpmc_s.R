@@ -90,7 +90,7 @@ rpmc_s <- function(x, value.var = NULL){
       }
       if(mm[k, 'do'] == 'merge'){
         commout[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), value.var] <- 0
-        commout[comm[ , taxa.var] == mm[k, p], value.var] <- mm[ , value.var] + mm[ , "s"]
+        commout[comm[ , taxa.var] == mm[k, p], value.var] <- mm[k , value.var] + mm[k , "s"]
         action[hier[ , p] == mm[k, p] & !is.na(hier[ , p])] <- 'merge'
         merged[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), 'with'] <- mm[k , p]
       }
