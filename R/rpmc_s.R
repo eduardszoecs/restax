@@ -64,14 +64,20 @@ rpmc_s <- function(x, value.var = NULL){
     # determine childs and parents
     mmm <- merge(hier, commout)  
     take <- mmm[!is.na(mmm[ , p]) , ]
-    
+    # take[ c(p, ch, value.var)]
     sna <- apply(take, 1, function(x) sum(is.na(x)))
-    parents <- is.na(take[ , ch]) & sna == max(sna)
+    ptmp <- data.frame(take[p], sna)
+    ptmp <- ddply(ptmp, p, summarise, 
+          parent = sna == max(sna)
+    )
+    parents <- ptmp$parent 
     childs <- !parents
     
     # add carry over
     if(nrow(co) > 0){
-      take[take[ , taxa.var] %in% co[ , taxa.var], value.var] <- co[ , value.var]
+      if(any(take[ , taxa.var] %in% co[ , taxa.var])){
+        take[take[ , taxa.var] %in% co[ , taxa.var], value.var] <- co[ , value.var]
+      }
     }
 
     sum_c <- ddply(take[childs, ], p, 
@@ -103,7 +109,7 @@ rpmc_s <- function(x, value.var = NULL){
         merged[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), 'with'] <- mm[k , p]
       }
     } 
-    co <- mm[mm$do == 'removed', c(taxa.var, value.var)]
+    co <- mm[mm$do == 'removed' & mm[, value.var] > 0, c(taxa.var, value.var)]
 #     print(commout)
 #     print(co)
   }

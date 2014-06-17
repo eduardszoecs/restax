@@ -66,6 +66,6 @@ out2 <- rpmc_s(df_w2, value.var = 'abu')
 
 
 test_that("RPMC-S second example", {
-  expect_that(out2$comm[, "abu"], equal(c(0, 430, 0,0,0,0,0,0,0,0,0,15,35,50)))
+  expect_that(out2$comm[, "abu"], equals(c(0, 430, 0,0,0,0,0,0,0,0,0,15,35,50)))
 })
 
