@@ -52,9 +52,8 @@ rpmc_s <- function(x, value.var = NULL){
   commout <- comm
   action <- rep(NA, nrow(commout))
   merged <- data.frame(hier[taxa.var], with = NA)
-  # carry over
-  co <- 0
-  
+  co <- data.frame()
+
   # loop through each parent-child pair
   for(i in seq_along(run)[-1]){
     p <- run[i]
@@ -64,17 +63,21 @@ rpmc_s <- function(x, value.var = NULL){
     
     # determine childs and parents
     mmm <- merge(hier, commout)  
-    take <- mmm[!is.na(mmm[ , p]) , c(p, ch, value.var)]
+    take <- mmm[!is.na(mmm[ , p]) , ]
     
     sna <- apply(take, 1, function(x) sum(is.na(x)))
     parents <- is.na(take[ , ch]) & sna == max(sna)
     childs <- !parents
+    
+    # add carry over
+    if(nrow(co) > 0){
+      take[take[ , taxa.var] %in% co[ , taxa.var], value.var] <- co[ , value.var]
+    }
 
     sum_c <- ddply(take[childs, ], p, 
                    .fun = function(x, col) {
-                     s = sum(x[ , col])
-                     n = length(x[ , col])
-                     out = data.frame(s, n)
+                     sum_childs = sum(x[ , col])
+                     data.frame(sum_childs)
                    }, 
                    value.var)
     # print(sum_c)
@@ -84,25 +87,25 @@ rpmc_s <- function(x, value.var = NULL){
     if(nrow(mm) == 0)
       next
     ##
-    mm$do <- ifelse(mm[, value.var] < mm$s, 'removed', 'merge')
-    # print(mm)
-    # print(co)
+    mm$do <- ifelse(mm[, value.var] < mm$sum_childs, 'removed', 'merge')
+#     print(mm)
+#     print(co)
     #   remove or merge
     for(k in 1:nrow(mm)){
       if(mm[k, 'do'] == 'removed'){
-        co <- commout[commout[ , taxa.var] == mm[k, p], value.var]
         commout[commout[ , taxa.var] == mm[k, p], value.var] <- 0
         action[commout[ , taxa.var] == mm[k, p]] <- 'removed'
       }
       if(mm[k, 'do'] == 'merge'){
         commout[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), value.var] <- 0
-        commout[comm[ , taxa.var] == mm[k, p], value.var] <- mm[k , value.var] + mm[k , "s"] + co
-        co <- 0
+        commout[comm[ , taxa.var] == mm[k, p], value.var] <- mm[k , value.var] + mm[k , "sum_childs"]
         action[hier[ , p] == mm[k, p] & !is.na(hier[ , p])] <- 'merge'
         merged[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), 'with'] <- mm[k , p]
       }
     } 
-    # print(commout)
+    co <- mm[mm$do == 'removed', c(taxa.var, value.var)]
+#     print(commout)
+#     print(co)
   }
   action[is.na(action)] <- 'keep'
   
