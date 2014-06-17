@@ -61,7 +61,7 @@ rpmc_s <- function(x, value.var = NULL){
     #     print(ch)
     
     # determine childs and parents
-    mmm <- merge(hier, comm)  
+    mmm <- merge(hier, commout)  
     take <- mmm[!is.na(mmm[ , p]) , c(p, ch, value.var)]
     #     print(take)
     #   # sum of childres
@@ -85,12 +85,12 @@ rpmc_s <- function(x, value.var = NULL){
     #   remove or merge
     for(k in 1:nrow(mm)){
       if(mm[k, 'do'] == 'removed'){
-        comm[comm[ , taxa.var] == mm[k, p], value.var] <- 0
-        action[comm[ , taxa.var] == mm[k, p]] <- 'removed'
+        commout[commout[ , taxa.var] == mm[k, p], value.var] <- 0
+        action[commout[ , taxa.var] == mm[k, p]] <- 'removed'
       }
       if(mm[k, 'do'] == 'merge'){
-        comm[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), value.var] <- 0
-        comm[comm[ , taxa.var] == mm[k, p], value.var] <- mm[ , value.var] + mm[ , "s"]
+        commout[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), value.var] <- 0
+        commout[comm[ , taxa.var] == mm[k, p], value.var] <- mm[ , value.var] + mm[ , "s"]
         action[hier[ , p] == mm[k, p] & !is.na(hier[ , p])] <- 'merge'
         merged[hier[ , p] == mm[k, p] & !is.na(hier[ , p]), 'with'] <- mm[k , p]
       }
@@ -99,10 +99,10 @@ rpmc_s <- function(x, value.var = NULL){
   action[is.na(action)] <- 'keep'
   
   # keep only value.var
-  comm <- comm[ , c(taxa.var, value.var)]
+  commout <- commout[ , c(taxa.var, value.var)]
   
   method <- 'RPMC-S'
-  out <- list(comm = comm, action = action, merged = merged, 
+  out <- list(comm = commout, action = action, merged = merged, 
               method = method)
   class(out) <- 'restax'
   return(out)
