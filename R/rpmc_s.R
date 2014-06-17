@@ -66,17 +66,21 @@ rpmc_s <- function(x, value.var = NULL){
     take <- mmm[!is.na(mmm[ , p]) , ]
     # take[ c(p, ch, value.var)]
     sna <- apply(take, 1, function(x) sum(is.na(x)))
-    ptmp <- data.frame(take[p], sna)
+    ptmp <- data.frame(take[p], sna, ord = 1:length(sna))
+    
     ptmp <- ddply(ptmp, p, summarise, 
-          parent = sna == max(sna)
+          parent = sna == max(sna),
+          ord = ord
     )
-    parents <- ptmp$parent 
+    # restore orders
+    ptmp <- ptmp[order(ptmp$ord), ]
+    parents <- ptmp$parent & is.na(take[ , ch])
     childs <- !parents
     
     # add carry over
     if(nrow(co) > 0){
       if(any(take[ , taxa.var] %in% co[ , taxa.var])){
-        take[take[ , taxa.var] %in% co[ , taxa.var], value.var] <- co[ , value.var]
+        take[take[ , taxa.var] %in% co[ , taxa.var], value.var] <- co[co[ , taxa.var] %in% take[ , taxa.var] , value.var]
       }
     }
 
