@@ -55,10 +55,10 @@ mcwp_s <- function(x, value.var = NULL, level = 'Family'){
   ambp <- rep(FALSE, nrow(hier)) # amb parent
   
   run <- rev(names(hier))
-  run <- run[!run %in% c(taxa.var, "Species")]
+  run <- run[!run %in% c(taxa.var)]
   ambp <- rep(FALSE, nrow(comm)) # amb parent
-  child <- !is.na(hier[ , 'Species'])
-  for(lev in run){
+  child <- !is.na(hier[ , run[1]])
+  for(lev in run[-1]){
     parents <- unique(hier[child, lev])
     ambp <- ambp | hier[ , lev] %in% parents & !child
     child <- !is.na(hier[ , lev])

@@ -247,6 +247,7 @@ df_rpmc$comm
 
 NOTES
 =============
+
 This package is currently under development and the code has not been tested extensively!
 Moreover, there is some work needed to make the package more user friendly!
 
@@ -261,7 +262,6 @@ Please [report any issues or bugs](https://github.com/EDiLD/restax/issues).
 TODOs
 =============
 
-+ Remove dependency of `mwcp()` and `rpkc()` on `"Species"` in hierarchy.
 + ADD DPAC_g
 + No classification information available?
 
