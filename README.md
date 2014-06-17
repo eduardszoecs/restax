@@ -258,6 +258,13 @@ Please use only ITIS as taxonomic back-end, as others have not been tested yet.
 
 Please [report any issues or bugs](https://github.com/EDiLD/restax/issues).
 
+TODOs
+=============
+
++ Remove dependency of `mwcp()` and `rpkc()` on `"Species"` in hierarchy.
++ Fix RPMC
++ ADD DPAC_g
+
 
 ### References
 Cuffney, T. F., Bilger, M. D. & Haigler, A. M. Ambiguous taxa: effects on the characterization and interpretation of invertebrate assemblages. Journal of the North American Benthological Society 26, 286–307 (2007).
