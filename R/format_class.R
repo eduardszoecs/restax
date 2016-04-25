@@ -13,11 +13,17 @@
 #' require(taxize)
 #' class <- classification(names(samp), db = 'itis')
 #' format_class(class[[1]])
+#'  format_class(class[[13]])
 #' # many classications
 #' require(plyr)
 #' rbind.fill(lapply(class, format_class))
 #' }
 format_class <- function(class){
+  if (length(class) == 1 && is.na(class)) {
+    message('class is NA, returning NA')
+    return(data.frame(kingdom = NA))
+  }
+    
   levs <- class[ , 'name']
   names(levs) <- class[ , 'rank']
   out <- data.frame(t(levs), stringsAsFactors = FALSE)
